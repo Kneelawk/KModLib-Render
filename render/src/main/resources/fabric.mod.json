@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "id": "kmodlib-render",
+  "version": "${version}",
+
+  "name": "KModLib Rendering",
+  "description": "Rendering utilities for all my mods.",
+  "authors": [
+    "Kneelawk"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/kmodlib-render/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.kneelawk.kmodlib.render.KModLibRender"
+    ]
+  },
+  "mixins": [ ],
+  "accessWidener": "kmodlib-render.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.14.17",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  },
+  "suggests": {
+    "flamingo": "*"
+  },
+
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ],
+      "parent": {
+        "id": "kmodlib",
+        "name": "KModLib",
+        "description": "Kneelawk's Minecraft mod library with utility code for other mods.",
+        "icon": "assets/kmodlib-render/icon.png",
+        "badges": [ "library" ]
+      }
+    }
+  }
+}
