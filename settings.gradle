@@ -13,6 +13,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'KModLib'
-
-include 'render'
+rootProject.name = 'kmodlib-render'
