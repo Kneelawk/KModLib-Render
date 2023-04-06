@@ -1,2 +1,2 @@
 # KModLib
-Kneelawk's Minecraft mod library with utility code for other mods
+Rendering utilities for all my mods
