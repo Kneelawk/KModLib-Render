@@ -1,8 +1,12 @@
 package com.kneelawk.kmodlib.render.blockmodel;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
+
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
@@ -10,10 +14,13 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockRenderView;
 
-public class BakedLayeredModel implements BakedModel {
+public class BakedLayeredModel implements BakedModel, FabricBakedModel {
     private final ModelTransformation transformation;
     private final Sprite particle;
     private final BakedModelLayer[] layers;
@@ -25,13 +32,33 @@ public class BakedLayeredModel implements BakedModel {
     }
 
     @Override
+    public boolean isVanillaAdapter() {
+        return false;
+    }
+
+    @Override
+    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos,
+                               Supplier<Random> randomSupplier, RenderContext context) {
+        for (BakedModelLayer layer : layers) {
+            layer.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+        }
+    }
+
+    @Override
+    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
+        for (BakedModelLayer layer : layers) {
+            layer.emitItemQuads(stack, randomSupplier, context);
+        }
+    }
+
+    @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random) {
-        return null;
+        return List.of();
     }
 
     @Override
     public boolean useAmbientOcclusion() {
-        return false;
+        return true;
     }
 
     @Override
@@ -41,7 +68,7 @@ public class BakedLayeredModel implements BakedModel {
 
     @Override
     public boolean isSideLit() {
-        return false;
+        return true;
     }
 
     @Override
@@ -51,16 +78,16 @@ public class BakedLayeredModel implements BakedModel {
 
     @Override
     public Sprite getParticleSprite() {
-        return null;
+        return particle;
     }
 
     @Override
     public ModelTransformation getTransformation() {
-        return null;
+        return transformation;
     }
 
     @Override
     public ModelOverrideList getOverrides() {
-        return null;
+        return ModelOverrideList.EMPTY;
     }
 }

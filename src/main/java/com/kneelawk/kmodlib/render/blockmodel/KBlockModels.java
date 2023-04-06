@@ -45,6 +45,8 @@ public class KBlockModels {
         Registry.register((Registry<? super Registry<Codec<? extends UnbakedModelLayer>>>) Registries.REGISTRIES,
             BLOCK_MODEL_LAYER_REGISTRY_ID, BLOCK_MODEL_LAYER_REGISTRY);
 
+        Registry.register(BLOCK_MODEL_REGISTRY, id("layered"), UnbakedLayeredModel.CODEC);
+
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(KBlockModels::getResourceProvider);
     }
 
