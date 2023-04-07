@@ -61,7 +61,7 @@ public class KBlockModels {
 
         Registry.register(BLOCK_MODEL_REGISTRY, id("layered"), UnbakedLayeredModel.CODEC);
 
-        Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("connected_texture"), UnbakedCTLayer.CODEC);
+        Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("quarter_connected_texture"), UnbakedCTLayer.CODEC);
 
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("block"), BlockModelConnector.TYPE);
 
