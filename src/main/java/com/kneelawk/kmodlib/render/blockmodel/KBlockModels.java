@@ -27,6 +27,7 @@ import com.kneelawk.kmodlib.render.KMLRLog;
 import com.kneelawk.kmodlib.render.blockmodel.connector.BlockModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.ct.UnbakedCTLayer;
+import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
 
 import static com.kneelawk.kmodlib.render.Constants.id;
 
@@ -36,12 +37,15 @@ public class KBlockModels {
     private static final Identifier BLOCK_MODEL_REGISTRY_ID = id("block_model");
     private static final Identifier BLOCK_MODEL_LAYER_REGISTRY_ID = id("block_model_layer");
     private static final Identifier BLOCK_MODEL_CONNECTOR_REGISTRY_ID = id("block_model_connector");
+    private static final Identifier SPRITE_SUPPLIER_REGISTRY_ID = id("sprite_supplier");
     private static final RegistryKey<Registry<Codec<? extends KUnbakedModel>>> BLOCK_MODEL_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_REGISTRY_ID);
     private static final RegistryKey<Registry<Codec<? extends UnbakedModelLayer>>> BLOCK_MODEL_LAYER_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_LAYER_REGISTRY_ID);
     private static final RegistryKey<Registry<ModelConnector.Type>> BLOCK_MODEL_CONNECTOR_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_CONNECTOR_REGISTRY_ID);
+    private static final RegistryKey<Registry<Codec<? extends UnbakedSpriteSupplier>>> SPRITE_SUPPLIER_REGISTRY_KEY =
+        RegistryKey.ofRegistry(SPRITE_SUPPLIER_REGISTRY_ID);
 
     public static final Registry<Codec<? extends KUnbakedModel>> BLOCK_MODEL_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_REGISTRY_KEY, Lifecycle.stable());
@@ -49,6 +53,8 @@ public class KBlockModels {
         new SimpleRegistry<>(BLOCK_MODEL_LAYER_REGISTRY_KEY, Lifecycle.stable());
     public static final Registry<ModelConnector.Type> BLOCK_MODEL_CONNECTOR_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_CONNECTOR_REGISTRY_KEY, Lifecycle.stable());
+    public static final Registry<Codec<? extends UnbakedSpriteSupplier>> SPRITE_SUPPLIER_REGISTRY =
+        new SimpleRegistry<>(SPRITE_SUPPLIER_REGISTRY_KEY, Lifecycle.stable());
 
     private static final AtomicBoolean GAVE_FORMAT_WARNING = new AtomicBoolean(false);
 

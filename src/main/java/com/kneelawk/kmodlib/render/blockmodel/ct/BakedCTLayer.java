@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -17,6 +16,7 @@ import net.minecraft.world.BlockRenderView;
 
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
+import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.util.QuadPos;
 
 import static com.kneelawk.kmodlib.render.blockmodel.util.TexDirectionUtils.texDown;
@@ -27,7 +27,7 @@ import static java.lang.Math.min;
 import static net.minecraft.util.math.MathHelper.clamp;
 
 public class BakedCTLayer implements BakedModelLayer {
-    private final Sprite[] sprites;
+    private final BakedSpriteSupplier[] sprites;
     private final RenderMaterial material;
     private final boolean cullFaces;
     private final boolean interiorBorder;
@@ -37,7 +37,7 @@ public class BakedCTLayer implements BakedModelLayer {
     private final QuadPos[] corners;
     private final boolean doCorners;
 
-    public BakedCTLayer(Sprite[] sprites, RenderMaterial material, float depth, boolean cullFaces,
+    public BakedCTLayer(BakedSpriteSupplier[] sprites, RenderMaterial material, float depth, boolean cullFaces,
                         boolean interiorBorder, int tintIndex, ModelConnector connector) {
         this.sprites = sprites;
         this.material = material;
@@ -68,7 +68,9 @@ public class BakedCTLayer implements BakedModelLayer {
 
             for (int corner = 0; corner < 4; corner++) {
                 corners[corner].emit(emitter, normal, null);
-                emitter.spriteBake(0, sprites[(indices >> (corner * 3)) & 0x7], MutableQuadView.BAKE_LOCK_UV);
+                emitter.spriteBake(0,
+                    sprites[(indices >> (corner * 3)) & 0x7].getSprite(blockView, state, pos, randomSupplier),
+                    MutableQuadView.BAKE_NORMALIZED);
                 emitter.colorIndex(tintIndex);
                 emitter.spriteColor(0, -1, -1, -1, -1);
                 emitter.material(material);
