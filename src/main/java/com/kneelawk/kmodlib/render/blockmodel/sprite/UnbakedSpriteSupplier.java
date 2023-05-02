@@ -31,8 +31,8 @@ public interface UnbakedSpriteSupplier {
     boolean bakesToSprite();
 
     @Nullable Sprite bakeToSprite(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                  ModelBakeSettings rotationContainer, Identifier modelId);
+                                  @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
 
     @Nullable BakedSpriteSupplier bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                       ModelBakeSettings rotationContainer, Identifier modelId);
+                                       @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
 }

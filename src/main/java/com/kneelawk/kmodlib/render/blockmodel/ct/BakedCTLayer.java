@@ -69,7 +69,7 @@ public class BakedCTLayer implements BakedModelLayer {
             for (int corner = 0; corner < 4; corner++) {
                 corners[corner].emit(emitter, normal, null);
                 emitter.spriteBake(0,
-                    sprites[(indices >> (corner * 3)) & 0x7].getSprite(blockView, state, pos, randomSupplier),
+                    sprites[(indices >> (corner * 3)) & 0x7].getBlockSprite(blockView, state, pos, randomSupplier),
                     MutableQuadView.BAKE_NORMALIZED);
                 emitter.colorIndex(tintIndex);
                 emitter.spriteColor(0, -1, -1, -1, -1);
