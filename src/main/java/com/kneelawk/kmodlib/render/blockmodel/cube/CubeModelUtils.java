@@ -24,7 +24,7 @@ import com.kneelawk.kmodlib.render.blockmodel.BakedMeshModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
-import com.kneelawk.kmodlib.render.blockmodel.util.QuadPos;
+import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
 public class CubeModelUtils {
     public static @Nullable BakedModelLayer createBlock(@Nullable ModelBakeSettings rotation, boolean cullFaces,
@@ -93,21 +93,21 @@ public class CubeModelUtils {
     private static void buildQuarteredFace(QuadEmitter emitter, @Nullable ModelBakeSettings rotation, Direction normal,
                                            boolean cullFaces, float sideDepth, float faceDepth, RenderMaterial material,
                                            Sprite sprite, int tintIndex) {
-        QuadPos[] corners = getCorners(sideDepth, faceDepth);
-        for (QuadPos corner : corners) {
+        FacePos[] corners = getCorners(sideDepth, faceDepth);
+        for (FacePos corner : corners) {
             corner.emit(emitter, normal, rotation);
             putQuadSettings(emitter, rotation, normal, cullFaces, material, sprite, tintIndex);
         }
     }
 
-    private static QuadPos[] getCorners(float sideDepth, float faceDepth) {
+    private static FacePos[] getCorners(float sideDepth, float faceDepth) {
         float depthClamped = MathHelper.clamp(sideDepth, 0.0f, 0.5f);
         float depthMaxed = Math.min(faceDepth, 0.5f);
-        return new QuadPos[]{
-            new QuadPos(0.0f + depthClamped, 0.0f + depthClamped, 0.5f, 0.5f, depthMaxed),
-            new QuadPos(0.5f, 0.0f + depthClamped, 1.0f - depthClamped, 0.5f, depthMaxed),
-            new QuadPos(0.0f + depthClamped, 0.5f, 0.5f, 1.0f - depthClamped, depthMaxed),
-            new QuadPos(0.5f, 0.5f, 1.0f - depthClamped, 1.0f - depthClamped, depthMaxed)
+        return new FacePos[]{
+            new FacePos(0.0f + depthClamped, 0.0f + depthClamped, 0.5f, 0.5f, depthMaxed),
+            new FacePos(0.5f, 0.0f + depthClamped, 1.0f - depthClamped, 0.5f, depthMaxed),
+            new FacePos(0.0f + depthClamped, 0.5f, 0.5f, 1.0f - depthClamped, depthMaxed),
+            new FacePos(0.5f, 0.5f, 1.0f - depthClamped, 1.0f - depthClamped, depthMaxed)
         };
     }
 
@@ -115,7 +115,7 @@ public class CubeModelUtils {
                                   boolean cullFaces, float sideDepth, float faceDepth, RenderMaterial material,
                                   Sprite sprite,
                                   int tintIndex) {
-        new QuadPos(0.0f + sideDepth, 0.0f + sideDepth, 1.0f - sideDepth, 1.0f - sideDepth, faceDepth).emit(emitter,
+        new FacePos(0.0f + sideDepth, 0.0f + sideDepth, 1.0f - sideDepth, 1.0f - sideDepth, faceDepth).emit(emitter,
             normal, rotation);
         putQuadSettings(emitter, rotation, normal, cullFaces, material, sprite, tintIndex);
     }

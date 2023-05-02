@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.util.math.Direction;
 
-public record QuadPos(float left, float bottom, float right, float top, float depth) {
+public record FacePos(float left, float bottom, float right, float top, float depth) {
     public void emit(QuadEmitter emitter, Direction face, @Nullable ModelBakeSettings rotationContainer) {
         if (rotationContainer != null) {
             QuadEmitterUtils.square(emitter, rotationContainer, face, left, bottom, right, top, depth);

@@ -17,7 +17,7 @@ import net.minecraft.world.BlockRenderView;
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
-import com.kneelawk.kmodlib.render.blockmodel.util.QuadPos;
+import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
 import static com.kneelawk.kmodlib.render.blockmodel.util.TexDirectionUtils.texDown;
 import static com.kneelawk.kmodlib.render.blockmodel.util.TexDirectionUtils.texLeft;
@@ -34,7 +34,7 @@ public class BakedCTLayer implements BakedModelLayer {
     private final int tintIndex;
     private final ModelConnector connector;
 
-    private final QuadPos[] corners;
+    private final FacePos[] corners;
     private final boolean doCorners;
 
     public BakedCTLayer(BakedSpriteSupplier[] sprites, RenderMaterial material, float depth, boolean cullFaces,
@@ -48,11 +48,11 @@ public class BakedCTLayer implements BakedModelLayer {
         this.tintIndex = tintIndex;
         this.connector = connector;
 
-        corners = new QuadPos[]{
-            new QuadPos(0.0f + depthClamped, 0.0f + depthClamped, 0.5f, 0.5f, depthMaxed),
-            new QuadPos(0.5f, 0.0f + depthClamped, 1.0f - depthClamped, 0.5f, depthMaxed),
-            new QuadPos(0.0f + depthClamped, 0.5f, 0.5f, 1.0f - depthClamped, depthMaxed),
-            new QuadPos(0.5f, 0.5f, 1.0f - depthClamped, 1.0f - depthClamped, depthMaxed)
+        corners = new FacePos[]{
+            new FacePos(0.0f + depthClamped, 0.0f + depthClamped, 0.5f, 0.5f, depthMaxed),
+            new FacePos(0.5f, 0.0f + depthClamped, 1.0f - depthClamped, 0.5f, depthMaxed),
+            new FacePos(0.0f + depthClamped, 0.5f, 0.5f, 1.0f - depthClamped, depthMaxed),
+            new FacePos(0.5f, 0.5f, 1.0f - depthClamped, 1.0f - depthClamped, depthMaxed)
         };
 
         doCorners = sprites.length > 4;
