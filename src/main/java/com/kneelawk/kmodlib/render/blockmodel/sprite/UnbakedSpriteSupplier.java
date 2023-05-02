@@ -16,8 +16,10 @@ import net.minecraft.util.Identifier;
 import com.kneelawk.kmodlib.render.blockmodel.KBlockModels;
 
 public interface UnbakedSpriteSupplier {
+    @SuppressWarnings("unchecked")
     Codec<UnbakedSpriteSupplier> CODEC = Codec.either(UnbakedStaticSpriteSupplier.CODEC,
-            KBlockModels.SPRITE_SUPPLIER_REGISTRY.getCodec().dispatch(UnbakedSpriteSupplier::getCodec, Function.identity()))
+            KBlockModels.SPRITE_SUPPLIER_REGISTRY.getCodec()
+                .dispatch(UnbakedSpriteSupplier::getCodec, codec -> (Codec<UnbakedSpriteSupplier>) codec))
         .xmap(either -> either.map(Function.identity(), Function.identity()), supplier -> {
             if (supplier instanceof UnbakedStaticSpriteSupplier s) {
                 return Either.left(s);
