@@ -17,6 +17,7 @@ import net.minecraft.world.BlockRenderView;
 
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
+import com.kneelawk.kmodlib.render.blockmodel.util.CubeModelUtils;
 
 public record BakedSpriteCubeModelLayer(@Nullable ModelBakeSettings rotation, boolean cullFaces, boolean quarterFaces,
                                         float sideDepth, float faceDepth, RenderMaterial material,

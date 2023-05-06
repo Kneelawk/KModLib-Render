@@ -1,4 +1,4 @@
-package com.kneelawk.kmodlib.render.blockmodel.cube;
+package com.kneelawk.kmodlib.render.blockmodel.util;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -20,24 +20,46 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
-import com.kneelawk.kmodlib.render.KMLRLog;
 import com.kneelawk.kmodlib.render.blockmodel.BakedMeshModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.render.blockmodel.JsonTexture;
+import com.kneelawk.kmodlib.render.blockmodel.cube.BakedSpriteCubeModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
-import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
+/**
+ * Utility methods for rendering cubes.
+ */
 public class CubeModelUtils {
-    public static @Nullable BakedModelLayer createBlock(ModelBakeSettings rotationContainer, boolean rotate,
-                                                        boolean cullFaces, boolean quarterFaces, float depth,
-                                                        @NotNull JsonMaterial material, @Nullable JsonTexture down,
-                                                        @Nullable JsonTexture up, @Nullable JsonTexture north,
-                                                        @Nullable JsonTexture south, @Nullable JsonTexture west,
-                                                        @Nullable JsonTexture east, Baker baker,
-                                                        Function<SpriteIdentifier, Sprite> textureGetter,
-                                                        Identifier modelId) {
+    /**
+     * Creates a baked model layer.
+     *
+     * @param rotationContainer the rotation container of this model.
+     * @param rotate            whether to consider the rotation container.
+     * @param cullFaces         whether to cull faces.
+     * @param quarterFaces      whether to cut faces into quarters.
+     * @param depth             the depth of each face.
+     * @param material          the material to render with.
+     * @param down              down texture.
+     * @param up                up texture.
+     * @param north             north texture.
+     * @param south             south texture.
+     * @param west              west texture.
+     * @param east              east texture.
+     * @param baker             the baker the model is being baked with.
+     * @param textureGetter     the texture getter the model is being baked with.
+     * @param modelId           the model id of the model being baked.
+     * @return a baked model layer.
+     */
+    public static @NotNull BakedModelLayer createBlock(ModelBakeSettings rotationContainer, boolean rotate,
+                                                       boolean cullFaces, boolean quarterFaces, float depth,
+                                                       @NotNull JsonMaterial material, @Nullable JsonTexture down,
+                                                       @Nullable JsonTexture up, @Nullable JsonTexture north,
+                                                       @Nullable JsonTexture south, @Nullable JsonTexture west,
+                                                       @Nullable JsonTexture east, Baker baker,
+                                                       Function<SpriteIdentifier, Sprite> textureGetter,
+                                                       Identifier modelId) {
         float depthClamped = MathHelper.clamp(depth, 0.0f, 0.5f);
         float depthMaxed = Math.min(depth, 0.5f);
         return CubeModelUtils.createBlock(rotate ? rotationContainer : null, cullFaces, quarterFaces, depthClamped,
@@ -52,13 +74,29 @@ public class CubeModelUtils {
             }, baker, textureGetter, modelId);
     }
 
-    public static @Nullable BakedModelLayer createBlock(@Nullable ModelBakeSettings rotation, boolean cullFaces,
-                                                        boolean quarterFaces, float sideDepth, float faceDepth,
-                                                        RenderMaterial material,
-                                                        @Nullable UnbakedSpriteSupplier[] unbakedSprites,
-                                                        int[] tintIndices, Baker baker,
-                                                        Function<SpriteIdentifier, Sprite> textureGetter,
-                                                        Identifier modelId) {
+    /**
+     * Creates a baked model layer.
+     *
+     * @param rotation       the rotation container of this model, if not ignored.
+     * @param cullFaces      whether to cull faces.
+     * @param quarterFaces   whether to cut faces into quarters.
+     * @param sideDepth      the depth of each side of a face.
+     * @param faceDepth      the depth of each face.
+     * @param material       the material to render with.
+     * @param unbakedSprites <code>6</code> unbaked sprites, one for each side of the block.
+     * @param tintIndices    <code>6</code> tint indices, one for each side of the block.
+     * @param baker          the baker this model is being baked with.
+     * @param textureGetter  the texture getter this model is being baked with.
+     * @param modelId        the model id of the model being baked.
+     * @return a baked model layer.
+     */
+    public static @NotNull BakedModelLayer createBlock(@Nullable ModelBakeSettings rotation, boolean cullFaces,
+                                                       boolean quarterFaces, float sideDepth, float faceDepth,
+                                                       RenderMaterial material,
+                                                       @Nullable UnbakedSpriteSupplier[] unbakedSprites,
+                                                       int[] tintIndices, Baker baker,
+                                                       Function<SpriteIdentifier, Sprite> textureGetter,
+                                                       Identifier modelId) {
         boolean bakesToSprite = true;
         for (UnbakedSpriteSupplier supplier : unbakedSprites) {
             if (supplier == null) continue;
@@ -75,12 +113,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                Sprite sprite = supplier.bakeToSprite(baker, textureGetter, rotation, modelId);
-                if (sprite == null) {
-                    KMLRLog.LOG.warn("Bake to sprite of {} returned null", unbakedSprites[i]);
-                    return null;
-                }
-                sprites[i] = sprite;
+                sprites[i] = supplier.bakeToSprite(baker, textureGetter, rotation, modelId);
             }
 
             MeshBuilder meshBuilder =
@@ -95,12 +128,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                BakedSpriteSupplier bakedSprite = supplier.bake(baker, textureGetter, rotation, modelId);
-                if (bakedSprite == null) {
-                    KMLRLog.LOG.warn("Bake of {} returned null", unbakedSprites[i]);
-                    return null;
-                }
-                bakedSprites[i] = bakedSprite;
+                bakedSprites[i] = supplier.bake(baker, textureGetter, rotation, modelId);
             }
 
             return new BakedSpriteCubeModelLayer(rotation, cullFaces, quarterFaces, sideDepth, faceDepth, material,
@@ -108,6 +136,19 @@ public class CubeModelUtils {
         }
     }
 
+    /**
+     * Emits a cube to the given emitter.
+     *
+     * @param emitter      the emitter to emit to.
+     * @param rotation     the rotation container of this model, if not ignored.
+     * @param cullFaces    whether to cull faces.
+     * @param quarterFaces whether to cut faces into quarters.
+     * @param sideDepth    the depth of each side of a face.
+     * @param faceDepth    the depth of each face.
+     * @param material     the material to render with.
+     * @param sprites      <code>6</code> sprites, one for each side of the block.
+     * @param tintIndices  <code>6</code> tint indices, one for each side of the block.
+     */
     public static void emitCube(QuadEmitter emitter, @Nullable ModelBakeSettings rotation, boolean cullFaces,
                                 boolean quarterFaces, float sideDepth, float faceDepth, RenderMaterial material,
                                 @Nullable Sprite[] sprites, int[] tintIndices) {

@@ -12,10 +12,25 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+/**
+ * A json version of a {@link RenderMaterial}.
+ *
+ * @param blendMode        the blend mode to use.
+ * @param ambientOcclusion disables ambient occlusion if <code>false</code>.
+ * @param hasColorIndex    disables color indices if <code>false</code>. Note that this being <code>true</code> is the default for most blocks. However, only faces actually specifying a tint index will have a tint applied.
+ * @param diffuseShading   disables diffuse shading if <code>false</code>.
+ * @param emissive         makes this material emissive if <code>true</code>.
+ */
 public record JsonMaterial(BlendMode blendMode, boolean ambientOcclusion, boolean hasColorIndex, boolean diffuseShading,
                            boolean emissive) {
+    /**
+     * The default material.
+     */
     public static final JsonMaterial DEFAULT = new JsonMaterial(BlendMode.DEFAULT, true, true, true, false);
 
+    /**
+     * The codec for encoding and decoding this type.
+     */
     public static final Codec<JsonMaterial> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.STRING.comapFlatMap(str -> {
                 try {
@@ -35,6 +50,9 @@ public record JsonMaterial(BlendMode blendMode, boolean ambientOcclusion, boolea
         Codec.BOOL.optionalFieldOf("emissive", false).forGetter(JsonMaterial::emissive)
     ).apply(instance, JsonMaterial::new));
 
+    /**
+     * @return this converted to a FRAPI {@link RenderMaterial}.
+     */
     public RenderMaterial toRenderMaterial() {
         return Objects.requireNonNull(RendererAccess.INSTANCE.getRenderer(), "No FRAPI renderer available")
             .materialFinder()

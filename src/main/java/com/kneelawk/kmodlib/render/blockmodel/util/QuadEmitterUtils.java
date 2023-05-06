@@ -10,12 +10,28 @@ import net.minecraft.util.math.Direction;
 
 import static java.lang.Math.abs;
 
+/**
+ * Utilities for emitting quads.
+ */
 public class QuadEmitterUtils {
     private static final float ORIGIN_X = 0.5f;
     private static final float ORIGIN_Y = 0.5f;
     private static final float ORIGIN_Z = 0.5f;
 
-    public static void square(QuadEmitter emitter, ModelBakeSettings rotationContainer, Direction nominalFace, float left, float bottom, float right, float top, float depth) {
+    /**
+     * Emits a face to an emitter.
+     *
+     * @param emitter           the emitter to emit to.
+     * @param rotationContainer the rotation container to
+     * @param nominalFace       the face that this quad is on.
+     * @param left              how far the left edge of this face is from the left side of block on this side.
+     * @param bottom            how far the bottom edge of this face is from the bottom side of the block on this side.
+     * @param right             how far the right edge of this face is from the right side of the block on this side.
+     * @param top               how far the top edge of this face is from the top side of the block on this side.
+     * @param depth             how far into this block this face is set.
+     */
+    public static void square(QuadEmitter emitter, ModelBakeSettings rotationContainer, Direction nominalFace,
+                              float left, float bottom, float right, float top, float depth) {
         Matrix4f matrix = rotationContainer.getRotation().getMatrix();
 
         Direction transformedFace = Direction.transform(matrix, nominalFace);
@@ -35,7 +51,7 @@ public class QuadEmitterUtils {
         Vector4f vec2;
         Vector4f vec3;
 
-        switch(nominalFace) {
+        switch (nominalFace) {
             case DOWN -> {
                 vec0 = new Vector4f(left - ORIGIN_X, newDepth - ORIGIN_Y, top - ORIGIN_Z, 1f);
                 vec1 = new Vector4f(left - ORIGIN_X, newDepth - ORIGIN_Y, bottom - ORIGIN_Z, 1f);

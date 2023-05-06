@@ -21,6 +21,7 @@ import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.render.blockmodel.JsonTexture;
 import com.kneelawk.kmodlib.render.blockmodel.UnbakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedStaticSpriteSupplier;
+import com.kneelawk.kmodlib.render.blockmodel.util.CubeModelUtils;
 
 public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, float depth, boolean cullFaces,
                                        boolean rotate, boolean quarterFaces) implements UnbakedModelLayer {

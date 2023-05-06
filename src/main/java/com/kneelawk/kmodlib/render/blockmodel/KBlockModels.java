@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.gson.JsonObject;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
 
@@ -35,7 +37,13 @@ import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
 
 import static com.kneelawk.kmodlib.render.Constants.id;
 
+/**
+ * Class containing registries for block models.
+ */
 public class KBlockModels {
+    /**
+     * The filename extension of KModLib-Render block models.
+     */
     public static final String MODEL_EXTENSION = ".kr.json";
 
     private static final Identifier BLOCK_MODEL_REGISTRY_ID = id("block_model");
@@ -51,18 +59,34 @@ public class KBlockModels {
     private static final RegistryKey<Registry<Codec<? extends UnbakedSpriteSupplier>>> SPRITE_SUPPLIER_REGISTRY_KEY =
         RegistryKey.ofRegistry(SPRITE_SUPPLIER_REGISTRY_ID);
 
+    /**
+     * Registry for registering codecs of {@link KUnbakedModel}s in.
+     */
     public static final Registry<Codec<? extends KUnbakedModel>> BLOCK_MODEL_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_REGISTRY_KEY, Lifecycle.stable());
+
+    /**
+     * Registry for registering codecs of {@link UnbakedModelLayer}s in.
+     */
     public static final Registry<Codec<? extends UnbakedModelLayer>> BLOCK_MODEL_LAYER_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_LAYER_REGISTRY_KEY, Lifecycle.stable());
+
+    /**
+     * Registry for registering types of {@link ModelConnector}s in.
+     */
     public static final Registry<ModelConnector.Type> BLOCK_MODEL_CONNECTOR_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_CONNECTOR_REGISTRY_KEY, Lifecycle.stable());
+
+    /**
+     * Registry for registering codecs of {@link UnbakedSpriteSupplier}s in.
+     */
     public static final Registry<Codec<? extends UnbakedSpriteSupplier>> SPRITE_SUPPLIER_REGISTRY =
         new SimpleRegistry<>(SPRITE_SUPPLIER_REGISTRY_KEY, Lifecycle.stable());
 
     private static final AtomicBoolean GAVE_FORMAT_WARNING = new AtomicBoolean(false);
 
     @SuppressWarnings("unchecked")
+    @ApiStatus.Internal
     public static void init() {
         Registry.register((Registry<? super Registry<Codec<? extends KUnbakedModel>>>) Registries.REGISTRIES,
             BLOCK_MODEL_REGISTRY_ID, BLOCK_MODEL_REGISTRY);

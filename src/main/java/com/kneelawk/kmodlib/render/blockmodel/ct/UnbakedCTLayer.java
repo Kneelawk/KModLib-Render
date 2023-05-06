@@ -23,14 +23,33 @@ import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.render.blockmodel.UnbakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
-import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedStaticSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
+import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedStaticSpriteSupplier;
 
+/**
+ * Unbaked connected-texture model layer.
+ *
+ * @param exteriorCorners exterior corner sprite supplier.
+ * @param interiorCorners interior corner sprite supplier.
+ * @param horizontalEdges horizontal edges sprite supplier.
+ * @param verticalEdges   vertical edges sprite supplier.
+ * @param noEdges         no edges sprite supplier.
+ * @param material        material to render with.
+ * @param depth           depth to render at.
+ * @param cullFaces       whether to cull faces.
+ * @param interiorBorder  whether to have borders inside a corner between three blocks in an L shape.
+ * @param tintIndex       tint index to render with.
+ * @param connector       the connector to control which blocks to connect to.
+ */
 public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
                              UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
                              @Nullable UnbakedSpriteSupplier noEdges, JsonMaterial material, float depth,
                              boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector)
     implements UnbakedModelLayer {
+
+    /**
+     * This model layer's codec.
+     */
     public static final Codec<UnbakedCTLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         UnbakedSpriteSupplier.CODEC.fieldOf("exterior_corners").forGetter(UnbakedCTLayer::exteriorCorners),
         UnbakedSpriteSupplier.CODEC.fieldOf("interior_corners").forGetter(UnbakedCTLayer::interiorCorners),
@@ -45,24 +64,20 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
         ModelConnector.CODEC.optionalFieldOf("connector", ModelConnector.DEFAULT).forGetter(UnbakedCTLayer::connector)
     ).apply(instance, UnbakedCTLayer::new));
 
-    public UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
-                          UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
-                          @Nullable UnbakedSpriteSupplier noEdges, JsonMaterial material, float depth,
-                          boolean cullFaces,
-                          boolean interiorBorder, int tintIndex, ModelConnector connector) {
-        this.exteriorCorners = exteriorCorners;
-        this.interiorCorners = interiorCorners;
-        this.horizontalEdges = horizontalEdges;
-        this.verticalEdges = verticalEdges;
-        this.noEdges = noEdges;
-        this.material = material;
-        this.depth = depth;
-        this.cullFaces = cullFaces;
-        this.interiorBorder = interiorBorder;
-        this.tintIndex = tintIndex;
-        this.connector = connector;
-    }
-
+    /**
+     * Constructs an unbaked connected texture model layer.
+     * @param exteriorCorners exterior corner sprite supplier.
+     * @param interiorCorners interior corner sprite supplier.
+     * @param horizontalEdges horizontal edges sprite supplier.
+     * @param verticalEdges   vertical edges sprite supplier.
+     * @param noEdges         no edges sprite supplier.
+     * @param material        material to render with.
+     * @param depth           depth to render at.
+     * @param cullFaces       whether to cull faces.
+     * @param interiorBorder  whether to have borders inside a corner between three blocks in an L shape.
+     * @param tintIndex       tint index to render with.
+     * @param connector       the connector to control which blocks to connect to.
+     */
     public UnbakedCTLayer(Identifier exteriorCorners, Identifier interiorCorners, Identifier horizontalEdges,
                           Identifier verticalEdges, @Nullable Identifier noEdges, JsonMaterial material, float depth,
                           boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {
@@ -72,10 +87,24 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
             interiorBorder, tintIndex, connector);
     }
 
+    /**
+     * Constructs an unbaked connected texture model layer.
+     * @param exteriorCorners exterior corner sprite supplier.
+     * @param interiorCorners interior corner sprite supplier.
+     * @param horizontalEdges horizontal edges sprite supplier.
+     * @param verticalEdges   vertical edges sprite supplier.
+     * @param noEdges         no edges sprite supplier.
+     * @param material        material to render with.
+     * @param depth           depth to render at.
+     * @param cullFaces       whether to cull faces.
+     * @param interiorBorder  whether to have borders inside a corner between three blocks in an L shape.
+     * @param tintIndex       tint index to render with.
+     * @param connector       the connector to control which blocks to connect to.
+     */
     public UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
-                           UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
-                           Optional<UnbakedSpriteSupplier> noEdges, JsonMaterial material, float depth,
-                           boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {
+                          UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
+                          Optional<UnbakedSpriteSupplier> noEdges, JsonMaterial material, float depth,
+                          boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {
         this(exteriorCorners, interiorCorners, horizontalEdges, verticalEdges, noEdges.orElse(null), material, depth,
             cullFaces, interiorBorder, tintIndex, connector);
     }

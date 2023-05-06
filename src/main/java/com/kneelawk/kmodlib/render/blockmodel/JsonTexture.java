@@ -11,6 +11,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
 
+/**
+ * Holds a sprite supplier and a tint index together.
+ *
+ * @param texture   the sprite supplier.
+ * @param tintIndex the tint index.
+ */
 public record JsonTexture(@Nullable UnbakedSpriteSupplier texture, int tintIndex) {
     private static final int DEFAULT_TINT_INDEX = -1;
     private static final Codec<JsonTexture> RECORD_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -22,6 +28,9 @@ public record JsonTexture(@Nullable UnbakedSpriteSupplier texture, int tintIndex
         this(texture.orElse(null), tintIndex);
     }
 
+    /**
+     * The codec for encoding and decoding this type.
+     */
     public static final Codec<JsonTexture> CODEC = Codec.either(UnbakedSpriteSupplier.CODEC, RECORD_CODEC)
         .xmap(either -> either.map(id -> new JsonTexture(id, DEFAULT_TINT_INDEX), Function.identity()),
             tex -> tex.tintIndex == DEFAULT_TINT_INDEX ? Either.left(tex.texture) : Either.right(tex));

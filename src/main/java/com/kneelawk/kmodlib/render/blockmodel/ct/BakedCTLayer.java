@@ -2,6 +2,8 @@ package com.kneelawk.kmodlib.render.blockmodel.ct;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.fabricmc.fabric.api.renderer.v1.material.RenderMaterial;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -17,7 +19,7 @@ import net.minecraft.world.BlockRenderView;
 
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
-import com.kneelawk.kmodlib.render.blockmodel.cube.CubeModelUtils;
+import com.kneelawk.kmodlib.render.blockmodel.util.CubeModelUtils;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
@@ -28,6 +30,9 @@ import static com.kneelawk.kmodlib.render.blockmodel.util.TexDirectionUtils.texU
 import static java.lang.Math.min;
 import static net.minecraft.util.math.MathHelper.clamp;
 
+/**
+ * Connected-texture baked model layer.
+ */
 public class BakedCTLayer implements BakedModelLayer {
     private final BakedSpriteSupplier[] sprites;
     private final RenderMaterial material;
@@ -40,8 +45,20 @@ public class BakedCTLayer implements BakedModelLayer {
     private final FacePos[] corners;
     private final boolean doCorners;
 
-    public BakedCTLayer(BakedSpriteSupplier[] sprites, RenderMaterial material, float depth, boolean cullFaces,
-                        boolean interiorBorder, int tintIndex, ModelConnector connector) {
+    /**
+     * Constructs a connected-texture model layer.
+     *
+     * @param sprites        sprite suppliers in order: exterior corners, horizontal edges, vertical edges, interior
+     *                       corners, and optionally, no edges.
+     * @param material       the material to render with.
+     * @param depth          the depth into the block to render at.
+     * @param cullFaces      whether to cull faces.
+     * @param interiorBorder whether to have borders inside a corner between three blocks in an L shape.
+     * @param tintIndex      the tint index to render with.
+     * @param connector      the connector to control which blocks to connect to.
+     */
+    public BakedCTLayer(@Nullable BakedSpriteSupplier[] sprites, RenderMaterial material, float depth,
+                        boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {
         this.sprites = sprites;
         this.material = material;
         this.depth = depth;
@@ -71,10 +88,14 @@ public class BakedCTLayer implements BakedModelLayer {
             int indices = getIndices(blockView, state, pos, normal);
 
             for (int corner = 0; corner < 4; corner++) {
+                BakedSpriteSupplier supplier = sprites[(indices >> (corner * 3)) & 0x7];
+                if (supplier == null) continue;
+
+                Sprite sprite = supplier.getBlockSprite(blockView, state, pos, randomSupplier);
+                if (sprite == null) continue;
+
                 corners[corner].emit(emitter, normal, null);
-                emitter.spriteBake(0,
-                    sprites[(indices >> (corner * 3)) & 0x7].getBlockSprite(blockView, state, pos, randomSupplier),
-                    MutableQuadView.BAKE_NORMALIZED);
+                emitter.spriteBake(0, sprite, MutableQuadView.BAKE_NORMALIZED);
                 emitter.colorIndex(tintIndex);
                 emitter.spriteColor(0, -1, -1, -1, -1);
                 emitter.material(material);

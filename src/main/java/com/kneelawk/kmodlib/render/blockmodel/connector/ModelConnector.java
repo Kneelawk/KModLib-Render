@@ -12,9 +12,22 @@ import net.minecraft.world.BlockRenderView;
 
 import com.kneelawk.kmodlib.render.blockmodel.KBlockModels;
 
+/**
+ * Controls which connected models connect.
+ */
 public interface ModelConnector {
+    /**
+     * The default model connector that is used if none are supplied.
+     */
     ModelConnector DEFAULT = BlockModelConnector.INSTANCE;
 
+    /**
+     * The model connector codec.
+     * <p>
+     * This is either a registry-lookup codec or an identifier codec. If an identifier is supplied, a singleton-type
+     * model connector is expected. If an object is supplied, the <code>type</code> parameter is used to perform the
+     * lookup but the result can be either a decodable-type or singleton-type model connector.
+     */
     Codec<ModelConnector> CODEC = Codec.either(Identifier.CODEC,
         KBlockModels.BLOCK_MODEL_CONNECTOR_REGISTRY.getCodec().dispatch(ModelConnector::getType, type -> {
             // this should only ever happen if an object was decoded with a type corresponding to a singleton type
@@ -63,21 +76,46 @@ public interface ModelConnector {
                 // otherwise, just tell it to try and encode a full object
             } else if (type instanceof Decodable) return DataResult.success(Either.right(conn));
 
-            // this should be impossible
+                // this should be impossible
             else throw new IncompatibleClassChangeError();
         });
 
+    /**
+     * @return the type of this model connector, registered with {@link KBlockModels#BLOCK_MODEL_CONNECTOR_REGISTRY}.
+     */
     Type getType();
 
+    /**
+     * Tests if the model governed by this connector should connect.
+     *
+     * @param view       the view of the world (typically a chunk during client-side chunk-building).
+     * @param pos        the position of the block being connected.
+     * @param otherPos   the position of the block being connected to.
+     * @param normal     the direction of the block being connected to from the block being connected.
+     * @param state      the block state of the block being connected.
+     * @param otherState the block state of the block being connected to.
+     * @return whether this block should connect to the other block.
+     */
     boolean canConnect(BlockRenderView view, BlockPos pos, BlockPos otherPos, Direction normal, BlockState state,
                        BlockState otherState);
 
+    /**
+     * A type of a model connector, for encoding and decoding purposes.
+     */
     sealed interface Type {
     }
 
+    /**
+     * A singleton-type model connector type.
+     * @param instance the single instance of the model connector.
+     */
     record Singleton(ModelConnector instance) implements Type {
     }
 
+    /**
+     * A decodable-type model connector type.
+     * @param codec the codec used for encoding and decoding instances of the model connector.
+     */
     record Decodable(Codec<? extends ModelConnector> codec) implements Type {
     }
 }

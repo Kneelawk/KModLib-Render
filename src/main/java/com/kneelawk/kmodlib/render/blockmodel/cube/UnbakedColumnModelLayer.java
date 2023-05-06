@@ -22,6 +22,7 @@ import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.render.blockmodel.JsonTexture;
 import com.kneelawk.kmodlib.render.blockmodel.UnbakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedStaticSpriteSupplier;
+import com.kneelawk.kmodlib.render.blockmodel.util.CubeModelUtils;
 
 public record UnbakedColumnModelLayer(@Nullable JsonTexture side, @Nullable JsonTexture end, JsonMaterial material,
                                       float depth, boolean cullFaces, boolean rotate, boolean quarterFaces)
