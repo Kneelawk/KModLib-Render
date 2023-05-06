@@ -45,6 +45,24 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
         ModelConnector.CODEC.optionalFieldOf("connector", ModelConnector.DEFAULT).forGetter(UnbakedCTLayer::connector)
     ).apply(instance, UnbakedCTLayer::new));
 
+    public UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
+                          UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
+                          @Nullable UnbakedSpriteSupplier noEdges, JsonMaterial material, float depth,
+                          boolean cullFaces,
+                          boolean interiorBorder, int tintIndex, ModelConnector connector) {
+        this.exteriorCorners = exteriorCorners;
+        this.interiorCorners = interiorCorners;
+        this.horizontalEdges = horizontalEdges;
+        this.verticalEdges = verticalEdges;
+        this.noEdges = noEdges;
+        this.material = material;
+        this.depth = depth;
+        this.cullFaces = cullFaces;
+        this.interiorBorder = interiorBorder;
+        this.tintIndex = tintIndex;
+        this.connector = connector;
+    }
+
     public UnbakedCTLayer(Identifier exteriorCorners, Identifier interiorCorners, Identifier horizontalEdges,
                           Identifier verticalEdges, @Nullable Identifier noEdges, JsonMaterial material, float depth,
                           boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {
@@ -54,7 +72,7 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
             interiorBorder, tintIndex, connector);
     }
 
-    private UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
+    public UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSpriteSupplier interiorCorners,
                            UnbakedSpriteSupplier horizontalEdges, UnbakedSpriteSupplier verticalEdges,
                            Optional<UnbakedSpriteSupplier> noEdges, JsonMaterial material, float depth,
                            boolean cullFaces, boolean interiorBorder, int tintIndex, ModelConnector connector) {

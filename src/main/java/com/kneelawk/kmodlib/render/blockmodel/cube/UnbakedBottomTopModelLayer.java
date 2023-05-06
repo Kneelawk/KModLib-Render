@@ -52,16 +52,16 @@ public record UnbakedBottomTopModelLayer(@Nullable JsonTexture side, @Nullable J
         this.quarterFaces = quarterFaces;
     }
 
-    public UnbakedBottomTopModelLayer(Identifier side, Identifier bottom, Identifier top, JsonMaterial material,
-                                      float depth, boolean cullFaces,
-                                      boolean rotate, boolean quarterFaces) {
-        this(new JsonTexture(new UnbakedStaticSpriteSupplier(side), -1),
-            new JsonTexture(new UnbakedStaticSpriteSupplier(bottom), -1),
-            new JsonTexture(new UnbakedStaticSpriteSupplier(top), -1), material, depth, cullFaces, rotate,
-            quarterFaces);
+    public UnbakedBottomTopModelLayer(@Nullable Identifier side, @Nullable Identifier bottom, @Nullable Identifier top,
+                                      JsonMaterial material, float depth, boolean cullFaces, boolean rotate,
+                                      boolean quarterFaces) {
+        this(side != null ? new JsonTexture(new UnbakedStaticSpriteSupplier(side), -1) : null,
+            bottom != null ? new JsonTexture(new UnbakedStaticSpriteSupplier(bottom), -1) : null,
+            top != null ? new JsonTexture(new UnbakedStaticSpriteSupplier(top), -1) : null, material, depth, cullFaces,
+            rotate, quarterFaces);
     }
 
-    private UnbakedBottomTopModelLayer(Optional<JsonTexture> side, Optional<JsonTexture> bottom,
+    public UnbakedBottomTopModelLayer(Optional<JsonTexture> side, Optional<JsonTexture> bottom,
                                        Optional<JsonTexture> top, JsonMaterial material, float depth,
                                        boolean cullFaces, boolean rotate, boolean quarterFaces) {
         this(side.orElse(null), bottom.orElse(null), top.orElse(null), material, depth, cullFaces, rotate,

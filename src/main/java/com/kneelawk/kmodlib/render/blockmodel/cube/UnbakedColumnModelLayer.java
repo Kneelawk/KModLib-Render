@@ -48,12 +48,11 @@ public record UnbakedColumnModelLayer(@Nullable JsonTexture side, @Nullable Json
         this.quarterFaces = quarterFaces;
     }
 
-    public UnbakedColumnModelLayer(Identifier side, Identifier bottom, JsonMaterial material,
-                                   float depth, boolean cullFaces,
-                                   boolean rotate, boolean quarterFaces) {
-        this(new JsonTexture(new UnbakedStaticSpriteSupplier(side), -1),
-            new JsonTexture(new UnbakedStaticSpriteSupplier(bottom), -1), material, depth, cullFaces, rotate,
-            quarterFaces);
+    public UnbakedColumnModelLayer(@Nullable Identifier side, @Nullable Identifier end, JsonMaterial material,
+                                   float depth, boolean cullFaces, boolean rotate, boolean quarterFaces) {
+        this(side != null ? new JsonTexture(new UnbakedStaticSpriteSupplier(side), -1) : null,
+            end != null ? new JsonTexture(new UnbakedStaticSpriteSupplier(end), -1) : null, material, depth, cullFaces,
+            rotate, quarterFaces);
     }
 
     public UnbakedColumnModelLayer(Optional<JsonTexture> side, Optional<JsonTexture> end, JsonMaterial material,

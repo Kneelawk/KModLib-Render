@@ -34,6 +34,16 @@ public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, f
         Codec.BOOL.optionalFieldOf("quarter_faces", false).forGetter(UnbakedCubeAllModelLayer::quarterFaces)
     ).apply(instance, UnbakedCubeAllModelLayer::new));
 
+    public UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, float depth, boolean cullFaces,
+                                    boolean rotate, boolean quarterFaces) {
+        this.all = all;
+        this.material = material;
+        this.depth = depth;
+        this.cullFaces = cullFaces;
+        this.rotate = rotate;
+        this.quarterFaces = quarterFaces;
+    }
+
     public UnbakedCubeAllModelLayer(Identifier all, JsonMaterial material, float depth, boolean cullFaces,
                                     boolean rotate, boolean quarterFaces) {
         this(new JsonTexture(new UnbakedStaticSpriteSupplier(all), -1), material, depth, cullFaces, rotate,
