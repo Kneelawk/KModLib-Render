@@ -30,6 +30,7 @@ import com.kneelawk.kmodlib.render.blockmodel.ct.UnbakedCTLayer;
 import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedBottomTopModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedColumnModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedCubeAllModelLayer;
+import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedCubeModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
 
 import static com.kneelawk.kmodlib.render.Constants.id;
@@ -74,6 +75,7 @@ public class KBlockModels {
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube_all"), UnbakedCubeAllModelLayer.CODEC);
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube_bottom_top"), UnbakedBottomTopModelLayer.CODEC);
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube_column"), UnbakedColumnModelLayer.CODEC);
+        Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube"), UnbakedCubeModelLayer.CODEC);
 
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("block"), BlockModelConnector.TYPE);
 
