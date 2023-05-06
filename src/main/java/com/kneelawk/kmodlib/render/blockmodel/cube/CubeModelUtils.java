@@ -3,6 +3,7 @@ package com.kneelawk.kmodlib.render.blockmodel.cube;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -22,19 +23,46 @@ import net.minecraft.util.math.MathHelper;
 import com.kneelawk.kmodlib.render.KMLRLog;
 import com.kneelawk.kmodlib.render.blockmodel.BakedMeshModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
+import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
+import com.kneelawk.kmodlib.render.blockmodel.JsonTexture;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
 public class CubeModelUtils {
+    public static @Nullable BakedModelLayer createBlock(ModelBakeSettings rotationContainer, boolean rotate,
+                                                        boolean cullFaces, boolean quarterFaces, float depth,
+                                                        @NotNull JsonMaterial material, @Nullable JsonTexture down,
+                                                        @Nullable JsonTexture up, @Nullable JsonTexture north,
+                                                        @Nullable JsonTexture south, @Nullable JsonTexture west,
+                                                        @Nullable JsonTexture east, Baker baker,
+                                                        Function<SpriteIdentifier, Sprite> textureGetter,
+                                                        Identifier modelId) {
+        float depthClamped = MathHelper.clamp(depth, 0.0f, 0.5f);
+        float depthMaxed = Math.min(depth, 0.5f);
+        return CubeModelUtils.createBlock(rotate ? rotationContainer : null, cullFaces, quarterFaces, depthClamped,
+            depthMaxed, material.toRenderMaterial(), new UnbakedSpriteSupplier[]{
+                down != null ? down.texture() : null, up != null ? up.texture() : null,
+                north != null ? north.texture() : null, south != null ? south.texture() : null,
+                west != null ? west.texture() : null, east != null ? east.texture() : null
+            }, new int[]{
+                down != null ? down.tintIndex() : -1, up != null ? up.tintIndex() : -1,
+                north != null ? north.tintIndex() : -1, south != null ? south.tintIndex() : -1,
+                west != null ? west.tintIndex() : -1, east != null ? east.tintIndex() : -1
+            }, baker, textureGetter, modelId);
+    }
+
     public static @Nullable BakedModelLayer createBlock(@Nullable ModelBakeSettings rotation, boolean cullFaces,
                                                         boolean quarterFaces, float sideDepth, float faceDepth,
-                                                        RenderMaterial material, UnbakedSpriteSupplier[] unbakedSprites,
+                                                        RenderMaterial material,
+                                                        @Nullable UnbakedSpriteSupplier[] unbakedSprites,
                                                         int[] tintIndices, Baker baker,
                                                         Function<SpriteIdentifier, Sprite> textureGetter,
                                                         Identifier modelId) {
         boolean bakesToSprite = true;
         for (UnbakedSpriteSupplier supplier : unbakedSprites) {
+            if (supplier == null) continue;
+
             if (!supplier.bakesToSprite()) {
                 bakesToSprite = false;
                 break;
@@ -44,7 +72,10 @@ public class CubeModelUtils {
         if (bakesToSprite) {
             Sprite[] sprites = new Sprite[6];
             for (int i = 0; i < 6; i++) {
-                Sprite sprite = unbakedSprites[i].bakeToSprite(baker, textureGetter, rotation, modelId);
+                UnbakedSpriteSupplier supplier = unbakedSprites[i];
+                if (supplier == null) continue;
+
+                Sprite sprite = supplier.bakeToSprite(baker, textureGetter, rotation, modelId);
                 if (sprite == null) {
                     KMLRLog.LOG.warn("Bake to sprite of {} returned null", unbakedSprites[i]);
                     return null;
@@ -61,7 +92,10 @@ public class CubeModelUtils {
         } else {
             BakedSpriteSupplier[] bakedSprites = new BakedSpriteSupplier[6];
             for (int i = 0; i < 6; i++) {
-                BakedSpriteSupplier bakedSprite = unbakedSprites[i].bake(baker, textureGetter, rotation, modelId);
+                UnbakedSpriteSupplier supplier = unbakedSprites[i];
+                if (supplier == null) continue;
+
+                BakedSpriteSupplier bakedSprite = supplier.bake(baker, textureGetter, rotation, modelId);
                 if (bakedSprite == null) {
                     KMLRLog.LOG.warn("Bake of {} returned null", unbakedSprites[i]);
                     return null;
@@ -76,9 +110,11 @@ public class CubeModelUtils {
 
     public static void emitCube(QuadEmitter emitter, @Nullable ModelBakeSettings rotation, boolean cullFaces,
                                 boolean quarterFaces, float sideDepth, float faceDepth, RenderMaterial material,
-                                Sprite[] sprites, int[] tintIndices) {
+                                @Nullable Sprite[] sprites, int[] tintIndices) {
         for (Direction normal : Direction.values()) {
             Sprite sprite = sprites[normal.getId()];
+            if (sprite == null) continue;
+
             int tintIndex = tintIndices[normal.getId()];
 
             if (quarterFaces) {

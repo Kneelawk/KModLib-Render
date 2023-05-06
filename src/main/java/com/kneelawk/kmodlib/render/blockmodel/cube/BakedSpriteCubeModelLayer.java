@@ -20,13 +20,17 @@ import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 
 public record BakedSpriteCubeModelLayer(@Nullable ModelBakeSettings rotation, boolean cullFaces, boolean quarterFaces,
                                         float sideDepth, float faceDepth, RenderMaterial material,
-                                        BakedSpriteSupplier[] spriteSuppliers, int[] tintIndices) implements BakedModelLayer {
+                                        @Nullable BakedSpriteSupplier[] spriteSuppliers, int[] tintIndices)
+    implements BakedModelLayer {
     @Override
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos,
                                Supplier<Random> randomSupplier, RenderContext context) {
         Sprite[] sprites = new Sprite[6];
         for (int i = 0; i < 6; i++) {
-            sprites[i] = spriteSuppliers[i].getBlockSprite(blockView, state, pos, randomSupplier);
+            BakedSpriteSupplier supplier = spriteSuppliers[i];
+            if (supplier == null) continue;
+
+            sprites[i] = supplier.getBlockSprite(blockView, state, pos, randomSupplier);
         }
 
         CubeModelUtils.emitCube(context.getEmitter(), rotation, cullFaces, quarterFaces, sideDepth, faceDepth,
@@ -37,7 +41,10 @@ public record BakedSpriteCubeModelLayer(@Nullable ModelBakeSettings rotation, bo
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
         Sprite[] sprites = new Sprite[6];
         for (int i = 0; i < 6; i++) {
-            sprites[i] = spriteSuppliers[i].getItemSprite(stack, randomSupplier);
+            BakedSpriteSupplier supplier = spriteSuppliers[i];
+            if (supplier == null) continue;
+
+            sprites[i] = supplier.getItemSprite(stack, randomSupplier);
         }
 
         CubeModelUtils.emitCube(context.getEmitter(), rotation, cullFaces, quarterFaces, sideDepth, faceDepth,

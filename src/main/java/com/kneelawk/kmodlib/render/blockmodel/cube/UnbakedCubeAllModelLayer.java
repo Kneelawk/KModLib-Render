@@ -15,13 +15,12 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.render.blockmodel.JsonTexture;
 import com.kneelawk.kmodlib.render.blockmodel.UnbakedModelLayer;
-import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedSpriteSupplier;
+import com.kneelawk.kmodlib.render.blockmodel.sprite.UnbakedStaticSpriteSupplier;
 
 public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, float depth, boolean cullFaces,
                                        boolean rotate, boolean quarterFaces) implements UnbakedModelLayer {
@@ -34,6 +33,12 @@ public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, f
         Codec.BOOL.optionalFieldOf("rotate", true).forGetter(UnbakedCubeAllModelLayer::rotate),
         Codec.BOOL.optionalFieldOf("quarter_faces", false).forGetter(UnbakedCubeAllModelLayer::quarterFaces)
     ).apply(instance, UnbakedCubeAllModelLayer::new));
+
+    public UnbakedCubeAllModelLayer(Identifier all, JsonMaterial material, float depth, boolean cullFaces,
+                                    boolean rotate, boolean quarterFaces) {
+        this(new JsonTexture(new UnbakedStaticSpriteSupplier(all), -1), material, depth, cullFaces, rotate,
+            quarterFaces);
+    }
 
     @Override
     public Codec<? extends UnbakedModelLayer> getCodec() {
@@ -52,13 +57,7 @@ public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, f
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
                                           ModelBakeSettings rotationContainer, Identifier modelId) {
-        float depthClamped = MathHelper.clamp(depth, 0.0f, 0.5f);
-        float depthMaxed = Math.min(depth, 0.5f);
-        return CubeModelUtils.createBlock(rotate ? rotationContainer : null, cullFaces, quarterFaces, depthClamped,
-            depthMaxed, material.toRenderMaterial(), new UnbakedSpriteSupplier[]{
-                all.texture(), all.texture(), all.texture(), all.texture(), all.texture(), all.texture()
-            }, new int[]{
-                all.tintIndex(), all.tintIndex(), all.tintIndex(), all.tintIndex(), all.tintIndex(), all.tintIndex()
-            }, baker, textureGetter, modelId);
+        return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, all, all,
+            all, all, all, all, baker, textureGetter, modelId);
     }
 }

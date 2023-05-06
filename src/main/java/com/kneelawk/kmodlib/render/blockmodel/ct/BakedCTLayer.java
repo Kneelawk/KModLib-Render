@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -16,6 +17,7 @@ import net.minecraft.world.BlockRenderView;
 
 import com.kneelawk.kmodlib.render.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
+import com.kneelawk.kmodlib.render.blockmodel.cube.CubeModelUtils;
 import com.kneelawk.kmodlib.render.blockmodel.sprite.BakedSpriteSupplier;
 import com.kneelawk.kmodlib.render.blockmodel.util.FacePos;
 
@@ -29,6 +31,7 @@ import static net.minecraft.util.math.MathHelper.clamp;
 public class BakedCTLayer implements BakedModelLayer {
     private final BakedSpriteSupplier[] sprites;
     private final RenderMaterial material;
+    private final float depth;
     private final boolean cullFaces;
     private final boolean interiorBorder;
     private final int tintIndex;
@@ -41,6 +44,7 @@ public class BakedCTLayer implements BakedModelLayer {
                         boolean interiorBorder, int tintIndex, ModelConnector connector) {
         this.sprites = sprites;
         this.material = material;
+        this.depth = depth;
         float depthClamped = clamp(depth, 0.0f, 0.5f);
         float depthMaxed = min(depth, 0.5f);
         this.cullFaces = cullFaces;
@@ -82,7 +86,11 @@ public class BakedCTLayer implements BakedModelLayer {
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        // not implemented
+        Sprite sprite = sprites[0].getItemSprite(stack, randomSupplier);
+
+        CubeModelUtils.emitCube(context.getEmitter(), null, cullFaces, true, depth, depth,
+            material, new Sprite[]{sprite, sprite, sprite, sprite, sprite, sprite},
+            new int[]{tintIndex, tintIndex, tintIndex, tintIndex, tintIndex, tintIndex});
     }
 
     private int getIndices(BlockRenderView view, BlockState state, BlockPos pos, Direction normal) {
