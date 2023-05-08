@@ -139,6 +139,7 @@ public final class RenderTags
             }
 
             profiler.pop();
+            KMLRLog.LOG.info("Render-tags loaded.");
 
             return table;
         }, executor);
