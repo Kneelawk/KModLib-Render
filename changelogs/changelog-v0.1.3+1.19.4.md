@@ -12,3 +12,4 @@ Changes:
     ]
   }
   ```
+* Added render-tag model connector.

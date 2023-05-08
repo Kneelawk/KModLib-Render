@@ -28,6 +28,7 @@ import net.minecraft.util.JsonHelper;
 import com.kneelawk.kmodlib.render.KMLRLog;
 import com.kneelawk.kmodlib.render.blockmodel.connector.BlockModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.connector.ModelConnector;
+import com.kneelawk.kmodlib.render.blockmodel.connector.RenderTagModelConnector;
 import com.kneelawk.kmodlib.render.blockmodel.ct.UnbakedCTLayer;
 import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedBottomTopModelLayer;
 import com.kneelawk.kmodlib.render.blockmodel.cube.UnbakedColumnModelLayer;
@@ -102,6 +103,7 @@ public class KBlockModels {
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube"), UnbakedCubeModelLayer.CODEC);
 
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("block"), BlockModelConnector.TYPE);
+        Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("render_tag"), RenderTagModelConnector.TYPE);
 
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(KBlockModels::getResourceProvider);
     }
