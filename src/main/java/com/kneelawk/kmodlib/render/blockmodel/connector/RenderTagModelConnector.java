@@ -25,6 +25,6 @@ public record RenderTagModelConnector(Identifier tag) implements ModelConnector 
     @Override
     public boolean canConnect(BlockRenderView view, BlockPos pos, BlockPos otherPos, Direction normal, BlockState state,
                               BlockState otherState) {
-        return RenderTags.isInTag(tag, state.getBlock());
+        return RenderTags.isInTag(tag, otherState.getBlock());
     }
 }
