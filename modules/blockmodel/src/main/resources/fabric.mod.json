@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "kmodlib-render",
+  "id": "kmodlib-blockmodel",
   "version": "${version}",
 
-  "name": "KModLib Rendering",
-  "description": "Dependency container for Kneelawk's rendering utility modules.",
+  "name": "KModLib Block Model",
+  "description": "Custom block model format allowing connected textures and emissives.",
   "authors": [
     "Kneelawk"
   ],
@@ -15,20 +15,22 @@
   },
 
   "license": "MIT",
-  "icon": "assets/kmodlib-render/icon.png",
+  "icon": "assets/kmodlib-blockmodel/icon.png",
 
   "environment": "client",
-  "entrypoints": { },
+  "entrypoints": {
+    "client": [
+      "com.kneelawk.kmodlib.client.blockmodel.KMLBlockModelMod"
+    ]
+  },
   "mixins": [ ],
-  "accessWidener": "kmodlib-render.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.14.17",
     "fabric-api": "*",
     "minecraft": "~1.19.4",
     "java": ">=17",
-    "kmodlib-blockmodel": "*",
-    "kmodlib-rendertag": "*"
+    "kmodlib-rendertag": "~0.2"
   },
   "suggests": {
     "flamingo": "*"
@@ -41,7 +43,7 @@
         "id": "kmodlib",
         "name": "KModLib",
         "description": "Kneelawk's Minecraft mod library with utility code for other mods.",
-        "icon": "assets/kmodlib-render/icon.png",
+        "icon": "assets/kmodlib-blockmodel/icon.png",
         "badges": [ "library" ]
       }
     }
