@@ -17,12 +17,12 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 
-import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedStaticSpriteSupplier;
-import com.kneelawk.kmodlib.client.blockmodel.util.CubeModelUtils;
 import com.kneelawk.kmodlib.client.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.client.blockmodel.JsonTexture;
 import com.kneelawk.kmodlib.client.blockmodel.UnbakedModelLayer;
+import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedStaticSpriteSupplier;
+import com.kneelawk.kmodlib.client.blockmodel.util.CubeModelUtils;
 
 public record UnbakedCubeModelLayer(@Nullable JsonTexture down, @Nullable JsonTexture up, @Nullable JsonTexture north,
                                     @Nullable JsonTexture south, @Nullable JsonTexture west, @Nullable JsonTexture east,
@@ -99,6 +99,6 @@ public record UnbakedCubeModelLayer(@Nullable JsonTexture down, @Nullable JsonTe
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
                                           ModelBakeSettings rotationContainer, Identifier modelId) {
         return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, down, up,
-            north, south, west, east, baker, textureGetter, modelId);
+            north, south, west, east, textureGetter, modelId);
     }
 }

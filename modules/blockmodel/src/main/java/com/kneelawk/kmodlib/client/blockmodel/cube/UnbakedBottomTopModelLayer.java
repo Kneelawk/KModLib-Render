@@ -63,8 +63,8 @@ public record UnbakedBottomTopModelLayer(@Nullable JsonTexture side, @Nullable J
     }
 
     public UnbakedBottomTopModelLayer(Optional<JsonTexture> side, Optional<JsonTexture> bottom,
-                                       Optional<JsonTexture> top, JsonMaterial material, float depth,
-                                       boolean cullFaces, boolean rotate, boolean quarterFaces) {
+                                      Optional<JsonTexture> top, JsonMaterial material, float depth,
+                                      boolean cullFaces, boolean rotate, boolean quarterFaces) {
         this(side.orElse(null), bottom.orElse(null), top.orElse(null), material, depth, cullFaces, rotate,
             quarterFaces);
     }
@@ -87,6 +87,6 @@ public record UnbakedBottomTopModelLayer(@Nullable JsonTexture side, @Nullable J
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
                                           ModelBakeSettings rotationContainer, Identifier modelId) {
         return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, bottom,
-            top, side, side, side, side, baker, textureGetter, modelId);
+            top, side, side, side, side, textureGetter, modelId);
     }
 }

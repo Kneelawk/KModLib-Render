@@ -12,7 +12,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 
-import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
@@ -20,13 +19,13 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
-import com.kneelawk.kmodlib.client.blockmodel.cube.BakedSpriteCubeModelLayer;
-import com.kneelawk.kmodlib.client.blockmodel.sprite.BakedSpriteSupplier;
-import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedSpriteSupplier;
 import com.kneelawk.kmodlib.client.blockmodel.BakedMeshModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.client.blockmodel.JsonTexture;
+import com.kneelawk.kmodlib.client.blockmodel.cube.BakedSpriteCubeModelLayer;
+import com.kneelawk.kmodlib.client.blockmodel.sprite.BakedSpriteSupplier;
+import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedSpriteSupplier;
 
 /**
  * Utility methods for rendering cubes.
@@ -47,7 +46,6 @@ public class CubeModelUtils {
      * @param south             south texture.
      * @param west              west texture.
      * @param east              east texture.
-     * @param baker             the baker the model is being baked with.
      * @param textureGetter     the texture getter the model is being baked with.
      * @param modelId           the model id of the model being baked.
      * @return a baked model layer.
@@ -57,7 +55,7 @@ public class CubeModelUtils {
                                                        @NotNull JsonMaterial material, @Nullable JsonTexture down,
                                                        @Nullable JsonTexture up, @Nullable JsonTexture north,
                                                        @Nullable JsonTexture south, @Nullable JsonTexture west,
-                                                       @Nullable JsonTexture east, Baker baker,
+                                                       @Nullable JsonTexture east,
                                                        Function<SpriteIdentifier, Sprite> textureGetter,
                                                        Identifier modelId) {
         float depthClamped = MathHelper.clamp(depth, 0.0f, 0.5f);
@@ -71,7 +69,7 @@ public class CubeModelUtils {
                 down != null ? down.tintIndex() : -1, up != null ? up.tintIndex() : -1,
                 north != null ? north.tintIndex() : -1, south != null ? south.tintIndex() : -1,
                 west != null ? west.tintIndex() : -1, east != null ? east.tintIndex() : -1
-            }, baker, textureGetter, modelId);
+            }, textureGetter, modelId);
     }
 
     /**
@@ -85,7 +83,6 @@ public class CubeModelUtils {
      * @param material       the material to render with.
      * @param unbakedSprites <code>6</code> unbaked sprites, one for each side of the block.
      * @param tintIndices    <code>6</code> tint indices, one for each side of the block.
-     * @param baker          the baker this model is being baked with.
      * @param textureGetter  the texture getter this model is being baked with.
      * @param modelId        the model id of the model being baked.
      * @return a baked model layer.
@@ -94,7 +91,7 @@ public class CubeModelUtils {
                                                        boolean quarterFaces, float sideDepth, float faceDepth,
                                                        RenderMaterial material,
                                                        @Nullable UnbakedSpriteSupplier[] unbakedSprites,
-                                                       int[] tintIndices, Baker baker,
+                                                       int[] tintIndices,
                                                        Function<SpriteIdentifier, Sprite> textureGetter,
                                                        Identifier modelId) {
         boolean bakesToSprite = true;
@@ -113,7 +110,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                sprites[i] = supplier.bakeToSprite(baker, textureGetter, rotation, modelId);
+                sprites[i] = supplier.bakeToSprite(textureGetter, rotation, modelId);
             }
 
             MeshBuilder meshBuilder =
@@ -128,7 +125,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                bakedSprites[i] = supplier.bake(baker, textureGetter, rotation, modelId);
+                bakedSprites[i] = supplier.bake(textureGetter, rotation, modelId);
             }
 
             return new BakedSpriteCubeModelLayer(rotation, cullFaces, quarterFaces, sideDepth, faceDepth, material,

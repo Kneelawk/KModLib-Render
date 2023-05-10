@@ -18,12 +18,12 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 
-import com.kneelawk.kmodlib.client.blockmodel.connector.ModelConnector;
-import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedSpriteSupplier;
 import com.kneelawk.kmodlib.client.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.client.blockmodel.UnbakedModelLayer;
+import com.kneelawk.kmodlib.client.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.client.blockmodel.sprite.BakedSpriteSupplier;
+import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedSpriteSupplier;
 import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedStaticSpriteSupplier;
 
 /**
@@ -66,6 +66,7 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
 
     /**
      * Constructs an unbaked connected texture model layer.
+     *
      * @param exteriorCorners exterior corner sprite supplier.
      * @param interiorCorners interior corner sprite supplier.
      * @param horizontalEdges horizontal edges sprite supplier.
@@ -89,6 +90,7 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
 
     /**
      * Constructs an unbaked connected texture model layer.
+     *
      * @param exteriorCorners exterior corner sprite supplier.
      * @param interiorCorners interior corner sprite supplier.
      * @param horizontalEdges horizontal edges sprite supplier.
@@ -132,18 +134,18 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
         BakedSpriteSupplier[] sprites;
         if (noEdges == null) {
             sprites = new BakedSpriteSupplier[]{
-                exteriorCorners.bake(baker, textureGetter, rotationContainer, modelId),
-                horizontalEdges.bake(baker, textureGetter, rotationContainer, modelId),
-                verticalEdges.bake(baker, textureGetter, rotationContainer, modelId),
-                interiorCorners.bake(baker, textureGetter, rotationContainer, modelId)
+                exteriorCorners.bake(textureGetter, rotationContainer, modelId),
+                horizontalEdges.bake(textureGetter, rotationContainer, modelId),
+                verticalEdges.bake(textureGetter, rotationContainer, modelId),
+                interiorCorners.bake(textureGetter, rotationContainer, modelId)
             };
         } else {
             sprites = new BakedSpriteSupplier[]{
-                exteriorCorners.bake(baker, textureGetter, rotationContainer, modelId),
-                horizontalEdges.bake(baker, textureGetter, rotationContainer, modelId),
-                verticalEdges.bake(baker, textureGetter, rotationContainer, modelId),
-                interiorCorners.bake(baker, textureGetter, rotationContainer, modelId),
-                noEdges.bake(baker, textureGetter, rotationContainer, modelId)
+                exteriorCorners.bake(textureGetter, rotationContainer, modelId),
+                horizontalEdges.bake(textureGetter, rotationContainer, modelId),
+                verticalEdges.bake(textureGetter, rotationContainer, modelId),
+                interiorCorners.bake(textureGetter, rotationContainer, modelId),
+                noEdges.bake(textureGetter, rotationContainer, modelId)
             };
         }
 
