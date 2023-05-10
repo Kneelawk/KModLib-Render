@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 
 @ApiStatus.Internal
 public class Constants {
-    public static final String MOD_ID = "kmodlib-block";
+    public static final String MOD_ID = "kmodlib-blockmodel";
 
     public static Identifier id(String path) {
         return new Identifier(MOD_ID, path);
