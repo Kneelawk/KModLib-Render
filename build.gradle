@@ -21,6 +21,14 @@ base {
     archivesName = project.archives_base_name
 }
 
+loom {
+    runs {
+        client {
+            programArgs('--width', '1280', '--height', '720')
+        }
+    }
+}
+
 repositories {
     maven {
         name = "TerraformersMC"
@@ -76,10 +84,6 @@ jar {
     from("LICENSE") {
         rename { "${it}_${base.archivesName.get()}" }
     }
-}
-
-runClient {
-    args("--width", "1280", "--height", "720")
 }
 
 // configure the maven publication
