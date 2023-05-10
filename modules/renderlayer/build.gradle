@@ -2,19 +2,9 @@ plugins {
     id 'fabric-loom'
     id 'maven-publish'
     id 'io.github.juuxel.loom-quiltflower'
+    id 'com.kneelawk.versioning'
 }
 
-String detectedVersion
-String releaseTag = System.getenv("RELEASE_TAG")
-if (releaseTag != null) {
-    detectedVersion = releaseTag.substring(1)
-    println("Detected release version: ${detectedVersion}")
-} else {
-    detectedVersion = project.mod_version
-    println("Detected local version: ${detectedVersion}")
-}
-
-version = detectedVersion
 group = project.maven_group
 
 base {
