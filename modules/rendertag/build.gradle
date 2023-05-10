@@ -21,6 +21,8 @@ base {
     archivesName = project.archives_base_name + '-rendertag'
 }
 
+libsDirectory = rootProject.libsDirectory
+
 repositories {
 }
 

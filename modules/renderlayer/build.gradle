@@ -21,6 +21,8 @@ base {
     archivesName = project.archives_base_name + '-renderlayer'
 }
 
+libsDirectory = rootProject.libsDirectory
+
 loom {
     accessWidenerPath = file("src/main/resources/kmodlib-renderlayer.accesswidener")
 }
