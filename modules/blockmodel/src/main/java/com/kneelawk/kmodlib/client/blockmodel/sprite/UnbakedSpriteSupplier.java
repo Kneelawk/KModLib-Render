@@ -50,26 +50,24 @@ public interface UnbakedSpriteSupplier {
     /**
      * Bakes this sprite supplier into a static sprite if possible.
      *
-     * @param baker             the supplied baker.
      * @param textureGetter     the supplied texture getter function.
      * @param rotationContainer the supplied rotation container.
      * @param modelId           the baking model's id.
      * @return this as a static sprite, or <code>null</code> if this cannot bake to a static sprite, an error occurred,
      * or this just bakes to <code>null</code>.
      */
-    @Nullable Sprite bakeToSprite(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
+    @Nullable Sprite bakeToSprite(Function<SpriteIdentifier, Sprite> textureGetter,
                                   @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
 
     /**
      * Bakes this sprite supplier into a baked sprite supplier.
      *
-     * @param baker             the supplied baker.
      * @param textureGetter     the supplied texture getter function.
      * @param rotationContainer the supplied rotation container.
      * @param modelId           the baking model's id.
      * @return a baked sprite supplier, or <code>null</code> if an error occurred or this just bakes to
      * <code>null</code>.
      */
-    @Nullable BakedSpriteSupplier bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
+    @Nullable BakedSpriteSupplier bake(Function<SpriteIdentifier, Sprite> textureGetter,
                                        @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
 }
