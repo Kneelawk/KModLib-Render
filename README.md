@@ -1,2 +1,2 @@
-# KModLib-Render
-Rendering utilities for all my mods
+# KModLib
+Utilities for all my mods
