@@ -18,18 +18,17 @@ version = detectedVersion
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = project.archives_base_name + '-renderlayer'
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/kmodlib-renderlayer.accesswidener")
 }
 
 repositories {
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/releases/"
-    }
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -38,15 +37,6 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
-    include project(path: ":kmodlib-blockmodel", configuration: "namedElements")
-
-    api project(path: ":kmodlib-renderlayer", configuration: "namedElements")
-    include project(path: ":kmodlib-renderlayer", configuration: "namedElements")
-
-    // Mod Menu
-    modLocalRuntime "com.terraformersmc:modmenu:${project.mod_menu_version}"
 }
 
 processResources {

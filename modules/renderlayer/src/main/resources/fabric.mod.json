@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "kmodlib-render",
+  "id": "kmodlib-renderlayer",
   "version": "${version}",
 
-  "name": "KModLib Rendering",
-  "description": "Dependency container for Kneelawk's rendering utility modules.",
+  "name": "KModLib RenderTag",
+  "description": "RenderLayer helpers and utilities.",
   "authors": [
     "Kneelawk"
   ],
@@ -15,20 +15,18 @@
   },
 
   "license": "MIT",
-  "icon": "assets/kmodlib-render/icon.png",
+  "icon": "assets/kmodlib-renderlayer/icon.png",
 
   "environment": "client",
   "entrypoints": { },
   "mixins": [ ],
+  "accessWidener": "kmodlib-renderlayer.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.14.17",
     "fabric-api": "*",
     "minecraft": "~1.19.4",
-    "java": ">=17",
-    "kmodlib-blockmodel": "*",
-    "kmodlib-renderlayer": "*",
-    "kmodlib-rendertag": "*"
+    "java": ">=17"
   },
   "suggests": {
     "flamingo": "*"
@@ -41,7 +39,7 @@
         "id": "kmodlib",
         "name": "KModLib",
         "description": "Kneelawk's Minecraft mod library with utility code for other mods.",
-        "icon": "assets/kmodlib-render/icon.png",
+        "icon": "assets/kmodlib-renderlayer/icon.png",
         "badges": [ "library" ]
       }
     }

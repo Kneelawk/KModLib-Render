@@ -16,7 +16,9 @@ pluginManagement {
 rootProject.name = 'kmodlib-render'
 
 include ':kmodlib-blockmodel'
+include ':kmodlib-renderlayer'
 include ':kmodlib-rendertag'
 
 project(':kmodlib-blockmodel').projectDir = file('modules/blockmodel')
+project(':kmodlib-renderlayer').projectDir = file('modules/renderlayer')
 project(':kmodlib-rendertag').projectDir = file('modules/rendertag')
