@@ -13,7 +13,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'kmodlib-render'
+rootProject.name = 'kmodlib'
 
 include ':kmodlib-blockmodel'
 include ':kmodlib-renderlayer'

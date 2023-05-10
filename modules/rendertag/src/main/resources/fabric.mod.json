@@ -9,9 +9,9 @@
     "Kneelawk"
   ],
   "contact": {
-    "homepage": "https://github.com/Kneelawk/KModLib-Render",
-    "sources": "https://github.com/Kneelawk/KModLib-Render",
-    "issues": "https://github.com/Kneelawk/KModLib-Render/issues"
+    "homepage": "https://github.com/Kneelawk/KModLib",
+    "sources": "https://github.com/Kneelawk/KModLib",
+    "issues": "https://github.com/Kneelawk/KModLib/issues"
   },
 
   "license": "MIT",
