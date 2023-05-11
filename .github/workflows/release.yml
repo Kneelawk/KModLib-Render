@@ -15,6 +15,7 @@ env:
 # 2023-05-02 - Kneelawk: Added javadoc publishing. Added maven job step for getting proper tag version by removing 'v'.
 # 2023-05-08 - Kneelawk: Combined maven and javadoc steps.
 # 2023-05-10 - Kneelawk: Copy all javadoc directories in the docs directory.
+# 2023-05-10 - Kneelawk: Use regular publish gradle task.
 
 on:
   push:
@@ -141,7 +142,7 @@ jobs:
           path: deploy
           persist-credentials: false
       - name: Do Javadoc & Maven
-        run: ./gradlew javadoc publishAllPublicationsToPublishRepoRepository --no-daemon
+        run: ./gradlew javadoc publish --no-daemon
         env:
           RELEASE_TAG: ${{ steps.tag_version.outputs.tag }}
           PUBLISH_REPO: deploy/src/maven/

@@ -92,10 +92,10 @@ public class SubmodulePlugin implements Plugin<Project> {
         publishing.getPublications()
             .create("mavenJava", MavenPublication.class, pub -> pub.from(project.getComponents().getByName("java")));
         if (publishRepo != null) {
-            MavenArtifactRepository repo = project.getObjects().newInstance(MavenArtifactRepository.class);
-            repo.setName("publishRepo");
-            repo.setUrl(project.uri(publishRepo));
-            publishing.getRepositories().add(repo);
+            publishing.getRepositories().maven(repo -> {
+                repo.setName("publishRepo");
+                repo.setUrl(rootProject.uri(publishRepo));
+            });
         }
 
         project.afterEvaluate(proj -> {
