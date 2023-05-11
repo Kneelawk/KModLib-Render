@@ -14,6 +14,7 @@ env:
 # 2023-04-22 - Kneelawk: Copy gradle caches to prevent re-building in publishing jobs.
 # 2023-05-02 - Kneelawk: Added javadoc publishing. Added maven job step for getting proper tag version by removing 'v'.
 # 2023-05-08 - Kneelawk: Combined maven and javadoc steps.
+# 2023-05-10 - Kneelawk: Copy all javadoc directories in the docs directory.
 
 on:
   push:
