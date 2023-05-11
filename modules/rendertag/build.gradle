@@ -3,78 +3,18 @@ plugins {
     id 'maven-publish'
     id 'io.github.juuxel.loom-quiltflower'
     id 'com.kneelawk.versioning'
+    id 'com.kneelawk.submodule'
 }
 
-group = project.maven_group
-
-base {
-    archivesName = project.archives_base_name + '-rendertag'
+submodule {
+    suffix = 'rendertag'
 }
-
-libsDirectory = rootProject.libsDirectory
 
 repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modCompileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
-    modLocalRuntime "net.fabricmc:fabric-loader:${project.loader_version}"
-
     // Fabric API. This is technically optional, but you probably want it anyway.
     modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    exclude("**/*.xcf")
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
-}
-
-afterEvaluate {
-    genSources.dependsOn = ['genSourcesWithQuiltflower']
-}
-
-tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-jar {
-    from("LICENSE") {
-        rename { "${it}_${base.archivesName.get()}" }
-    }
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-        }
-    }
-
-    repositories {
-        String publishRepo = System.getenv("PUBLISH_REPO")
-        if (publishRepo) {
-            maven {
-                name = "publishRepo"
-                url = uri(publishRepo)
-            }
-        }
-    }
 }

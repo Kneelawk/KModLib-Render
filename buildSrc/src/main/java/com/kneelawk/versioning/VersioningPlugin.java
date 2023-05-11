@@ -25,7 +25,7 @@ public class VersioningPlugin implements Plugin<Project> {
                 "Failed to detect version. The `local_mod_version` property must be specified in local builds. The `RELEASE_TAG` environment variable must be specified in release builds.");
         }
 
-        ext.add("mod_version", detectedVersion);
+        ext.getExtraProperties().set("mod_version", detectedVersion);
         target.setVersion(detectedVersion);
     }
 }

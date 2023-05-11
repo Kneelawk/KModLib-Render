@@ -2,8 +2,8 @@
 name: release
 
 env:
-  PROJECT_NAME: KModLib-Render
-  JAVADOC_NAME: kmodlib-render
+  PROJECT_NAME: KModLib
+  JAVADOC_NAME: kmodlib
 
 # Variant: github, maven+javadoc
 
@@ -147,7 +147,7 @@ jobs:
       - name: Create Docs Directory
         run: mkdir -p deploy/src/docs/${{ env.JAVADOC_NAME }}/${{ steps.project_version.outputs.result }}
       - name: Copy To Deployment Repository Javadocs
-        run: cp -rf build/docs/javadoc deploy/src/docs/${{ env.JAVADOC_NAME }}/${{ steps.project_version.outputs.result }}/
+        run: cp -rf build/docs/* deploy/src/docs/${{ env.JAVADOC_NAME }}/${{ steps.project_version.outputs.result }}/
       - name: Commit Deployment Repository Changes
         run: |
           git config --global user.name "github-actions[bot]"
