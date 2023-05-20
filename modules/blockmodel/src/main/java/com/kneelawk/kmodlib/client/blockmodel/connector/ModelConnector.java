@@ -107,6 +107,7 @@ public interface ModelConnector {
 
     /**
      * A singleton-type model connector type.
+     *
      * @param instance the single instance of the model connector.
      */
     record Singleton(ModelConnector instance) implements Type {
@@ -114,6 +115,7 @@ public interface ModelConnector {
 
     /**
      * A decodable-type model connector type.
+     *
      * @param codec the codec used for encoding and decoding instances of the model connector.
      */
     record Decodable(Codec<? extends ModelConnector> codec) implements Type {

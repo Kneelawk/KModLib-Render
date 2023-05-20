@@ -7,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
 
-import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;

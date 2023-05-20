@@ -17,10 +17,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 
-import com.kneelawk.kmodlib.client.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.client.blockmodel.BakedModelLayer;
-import com.kneelawk.kmodlib.client.blockmodel.util.CubeModelUtils;
+import com.kneelawk.kmodlib.client.blockmodel.connector.ModelConnector;
 import com.kneelawk.kmodlib.client.blockmodel.sprite.BakedSpriteSupplier;
+import com.kneelawk.kmodlib.client.blockmodel.util.CubeModelUtils;
 import com.kneelawk.kmodlib.client.blockmodel.util.FacePos;
 
 import static com.kneelawk.kmodlib.client.blockmodel.util.TexDirectionUtils.texDown;

@@ -7,7 +7,6 @@ import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 import org.gradle.api.plugins.BasePluginExtension;
 import org.gradle.api.plugins.ExtensionContainer;
 import org.gradle.api.plugins.JavaPluginExtension;
@@ -54,7 +53,8 @@ public class SubmodulePlugin implements Plugin<Project> {
             throw new IllegalStateException("Submodule plugin requires the `yarn_mappings` property.");
 
         String loaderVersion = (String) project.property("loader_version");
-        if (loaderVersion == null) throw new IllegalStateException("Submodule plugin requires the `loader_version` property.");
+        if (loaderVersion == null)
+            throw new IllegalStateException("Submodule plugin requires the `loader_version` property.");
 
         String publishRepo = System.getenv("PUBLISH_REPO");
 
