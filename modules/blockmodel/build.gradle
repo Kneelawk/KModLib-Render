@@ -27,9 +27,11 @@ dependencies {
 
     // No Indium? -- Complains if the user installs this mod with Sodium but without Indium.
     // KModLib-BlockModel relies HEAVILY on the Fabric Render API.
-    modImplementation("me.luligabi:NoIndium:${project.no_indium_version}") {
-        exclude group: 'net.fabricmc'
-        exclude group: 'net.fabricmc.fabric-api'
+    if (project.no_indium_enabled.toBoolean()) {
+        modImplementation("me.luligabi:NoIndium:${project.no_indium_version}") {
+            exclude group: 'net.fabricmc'
+            exclude group: 'net.fabricmc.fabric-api'
+        }
+        include "me.luligabi:NoIndium:${project.no_indium_version}"
     }
-    include "me.luligabi:NoIndium:${project.no_indium_version}"
 }

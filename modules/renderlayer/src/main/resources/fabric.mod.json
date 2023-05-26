@@ -3,7 +3,7 @@
   "id": "kmodlib-renderlayer",
   "version": "${version}",
 
-  "name": "KModLib RenderTag",
+  "name": "KModLib RenderLayer",
   "description": "RenderLayer helpers and utilities.",
   "authors": [
     "Kneelawk"

@@ -3,7 +3,7 @@
   "id": "kmodlib-blockmodel",
   "version": "${version}",
 
-  "name": "KModLib Block Model",
+  "name": "KModLib BlockModel",
   "description": "Custom block model format allowing connected textures and emissives.",
   "authors": [
     "Kneelawk"
