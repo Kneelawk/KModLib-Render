@@ -27,7 +27,8 @@
 
   "depends": {
     "fabricloader": ">=0.14.17",
-    "fabric-api": "*",
+    "fabric-renderer-api-v1": "*",
+    "fabric-models-v0": "*",
     "minecraft": "~1.20-",
     "java": ">=17",
     "kmodlib-rendertag": "~0.2"
