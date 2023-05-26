@@ -19,6 +19,6 @@ repositories {
 
 dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+//    modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+//    modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
