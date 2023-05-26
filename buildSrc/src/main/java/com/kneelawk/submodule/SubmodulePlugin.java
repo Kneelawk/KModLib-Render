@@ -112,6 +112,12 @@ public class SubmodulePlugin implements Plugin<Project> {
                 java.getDocsDir().convention(
                     rootJava.getDocsDir().flatMap(docsDir -> suffix.map(s -> docsDir.dir(archivesBaseName + s))));
             }
+
+            // fix issue with just running `genSources`
+            tasks.named("genSourcesWithQuiltflower", task -> {
+                task.dependsOn(rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("resolveQuiltflower")).toArray());
+                task.dependsOn(rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar")).toArray());
+            });
         });
     }
 }
