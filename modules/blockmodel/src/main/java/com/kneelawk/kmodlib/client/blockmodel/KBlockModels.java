@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
@@ -44,7 +45,8 @@ public class KBlockModels {
     /**
      * The filename extension of KModLib-Render block models.
      */
-    public static final String MODEL_EXTENSION = ".kr.json";
+    public static final String MODEL_EXTENSION_1 = ".kml.json";
+    public static final String MODEL_EXTENSION_2 = ".json.kml";
 
     private static final Identifier BLOCK_MODEL_REGISTRY_ID = id("block_model");
     private static final Identifier BLOCK_MODEL_LAYER_REGISTRY_ID = id("block_model_layer");
@@ -83,7 +85,8 @@ public class KBlockModels {
     public static final Registry<Codec<? extends UnbakedSpriteSupplier>> SPRITE_SUPPLIER_REGISTRY =
         new SimpleRegistry<>(SPRITE_SUPPLIER_REGISTRY_KEY, Lifecycle.stable());
 
-    private static final AtomicBoolean GAVE_FORMAT_WARNING = new AtomicBoolean(false);
+    private static final AtomicBoolean GAVE_FORMAT_WARNING_1 = new AtomicBoolean(false);
+    private static final AtomicBoolean GAVE_FORMAT_WARNING_2 = new AtomicBoolean(false);
 
     @SuppressWarnings("unchecked")
     @ApiStatus.Internal
@@ -109,26 +112,34 @@ public class KBlockModels {
 
     private static ModelResourceProvider getResourceProvider(ResourceManager manager) {
         return (id, ctx) -> {
-            Identifier modelId = new Identifier(id.getNamespace(), "models/" + id.getPath() + MODEL_EXTENSION);
-            Optional<Resource> res = manager.getResource(modelId);
-            if (res.isPresent()) {
-                try {
-                    JsonObject object = JsonHelper.deserialize(new InputStreamReader(res.get().getInputStream()));
-                    return KUnbakedModel.CODEC.parse(JsonOps.INSTANCE, object).resultOrPartial(msg -> {
-                        KLog.LOG.error("Error parsing k-render JSON model '{}': {}", modelId, msg);
-                        if (!GAVE_FORMAT_WARNING.getAndSet(true)) {
-                            KLog.LOG.error(
-                                "If you are generating custom JSON models, be aware that models ending in {} are picked up by KModLib-Render and interpreted as its custom model JSON format instead of Minecraft's default model JSON format.",
-                                MODEL_EXTENSION);
-                        }
-                    }).orElse(null);
-                } catch (IOException e) {
-                    KLog.LOG.warn("Error loading k-render model: {}", modelId, e);
-                    return null;
-                }
-            } else {
+            KUnbakedModel model = tryLoadModel(manager, id, MODEL_EXTENSION_1, GAVE_FORMAT_WARNING_1);
+            if (model != null) return model;
+
+            return tryLoadModel(manager, id, MODEL_EXTENSION_2, GAVE_FORMAT_WARNING_2);
+        };
+    }
+
+    @Nullable
+    private static KUnbakedModel tryLoadModel(ResourceManager manager, Identifier id, String extension, AtomicBoolean gaveFormatWarning) {
+        Identifier modelId = new Identifier(id.getNamespace(), "models/" + id.getPath() + extension);
+        Optional<Resource> res = manager.getResource(modelId);
+        if (res.isPresent()) {
+            try {
+                JsonObject object = JsonHelper.deserialize(new InputStreamReader(res.get().getInputStream()));
+                return KUnbakedModel.CODEC.parse(JsonOps.INSTANCE, object).resultOrPartial(msg -> {
+                    KLog.LOG.error("Error parsing k-render JSON model '{}': {}", modelId, msg);
+                    if (!gaveFormatWarning.getAndSet(true)) {
+                        KLog.LOG.error(
+                            "If you are generating custom JSON models, be aware that models ending in {} are picked up by KModLib-Render and interpreted as its custom model JSON format instead of Minecraft's default model JSON format.",
+                            extension);
+                    }
+                }).orElse(null);
+            } catch (IOException e) {
+                KLog.LOG.warn("Error loading k-render model: {}", modelId, e);
                 return null;
             }
-        };
+        } else {
+            return null;
+        }
     }
 }
