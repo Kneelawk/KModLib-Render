@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "kmodlib-overlay",
+  "version": "${version}",
+
+  "name": "KModLib Overlay",
+  "description": "Provides a custom \"overlay\" framebuffer for rendering things on top of terrain.",
+  "authors": [
+    "Kneelawk"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Kneelawk/KModLib",
+    "sources": "https://github.com/Kneelawk/KModLib",
+    "issues": "https://github.com/Kneelawk/KModLib/issues"
+  },
+
+  "license": "MIT",
+  "icon": "assets/kmodlib-overlay/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.kneelawk.kmodlib.client.overlay.KMLOverlayMod"
+    ]
+  },
+  "mixins": [ ],
+
+  "depends": {
+    "fabricloader": ">=0.14.17",
+    "fabric-api": "*",
+    "minecraft": "~1.20-",
+    "java": ">=17",
+    "kmodlib-rendertag": "~0.2"
+  },
+  "suggests": {
+    "flamingo": "*"
+  },
+
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ],
+      "parent": {
+        "id": "kmodlib",
+        "name": "KModLib",
+        "description": "Kneelawk's Minecraft mod library with utility code for other mods.",
+        "icon": "assets/kmodlib-overlay/icon.png",
+        "badges": [ "library" ]
+      }
+    }
+  }
+}

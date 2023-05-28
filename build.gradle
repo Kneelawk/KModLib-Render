@@ -34,6 +34,9 @@ dependencies {
     api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
     include project(path: ":kmodlib-blockmodel", configuration: "namedElements")
 
+    api project(path: ":kmodlib-overlay", configuration: "namedElements")
+    include project(path: ":kmodlib-overlay", configuration: "namedElements")
+
     api project(path: ":kmodlib-renderlayer", configuration: "namedElements")
     include project(path: ":kmodlib-renderlayer", configuration: "namedElements")
 

@@ -16,9 +16,11 @@ pluginManagement {
 rootProject.name = 'kmodlib-all'
 
 include ':kmodlib-blockmodel'
+include ':kmodlib-overlay'
 include ':kmodlib-renderlayer'
 include ':kmodlib-rendertag'
 
 project(':kmodlib-blockmodel').projectDir = file('modules/blockmodel')
+project(':kmodlib-overlay').projectDir = file('modules/overlay')
 project(':kmodlib-renderlayer').projectDir = file('modules/renderlayer')
 project(':kmodlib-rendertag').projectDir = file('modules/rendertag')
