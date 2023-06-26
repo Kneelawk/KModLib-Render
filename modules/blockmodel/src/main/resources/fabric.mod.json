@@ -30,7 +30,7 @@
     "fabric-api": "*",
     "minecraft": "~1.20-",
     "java": ">=17",
-    "kmodlib-rendertag": "~0.2"
+    "kmodlib-rendertag": "*"
   },
   "suggests": {
     "flamingo": "*"
