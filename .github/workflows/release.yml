@@ -16,6 +16,7 @@ env:
 # 2023-05-08 - Kneelawk: Combined maven and javadoc steps.
 # 2023-05-10 - Kneelawk: Copy all javadoc directories in the docs directory.
 # 2023-05-10 - Kneelawk: Use regular publish gradle task.
+# 2023-06-25 - Kneelawk: Capture module build directories.
 
 on:
   push:
@@ -51,6 +52,11 @@ jobs:
         with:
           name: build-dir
           path: build/
+      - name: Capture Module Build Directories
+        uses: actions/upload-artifact@v2
+        with:
+          name: module-build-dirs
+          path: modules/*/build/
       - name: Capture Gradle Directory
         uses: actions/upload-artifact@v2
         with:
@@ -110,6 +116,11 @@ jobs:
         with:
           name: build-dir
           path: build/
+      - name: Grab Module Builds
+        uses: actions/download-artifact@v3
+        with:
+          name: module-build-dirs
+          path: modules/
       - name: Grab Gradle Directory
         uses: actions/download-artifact@v3
         with:

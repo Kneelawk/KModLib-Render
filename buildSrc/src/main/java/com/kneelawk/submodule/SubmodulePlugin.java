@@ -1,5 +1,6 @@
 package com.kneelawk.submodule;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.TaskContainer;
+import org.gradle.api.tasks.bundling.AbstractArchiveTask;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.compile.JavaCompile;
 
@@ -97,6 +99,12 @@ public class SubmodulePlugin implements Plugin<Project> {
                 repo.setUrl(rootProject.uri(publishRepo));
             });
         }
+
+        // Make builds reproducible
+        tasks.withType(AbstractArchiveTask.class).configureEach(task -> {
+            task.setPreserveFileTimestamps(false);
+            task.setReproducibleFileOrder(true);
+        });
 
         project.afterEvaluate(proj -> {
             tasks.named("genSources", task -> task.setDependsOn(List.of("genSourcesWithQuiltflower")));
