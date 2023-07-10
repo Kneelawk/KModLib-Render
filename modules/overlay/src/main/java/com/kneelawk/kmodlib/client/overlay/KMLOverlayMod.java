@@ -27,13 +27,19 @@ public class KMLOverlayMod implements ClientModInitializer {
         WorldRenderEvents.END.register(this::render);
     }
 
+    private boolean isWindowInvalid() {
+        Window window = MC.getWindow();
+
+        return window.getWidth() == 0 || window.getHeight() == 0;
+    }
+
     private @NotNull Framebuffer getFramebuffer() {
         Window window = MC.getWindow();
 
         Framebuffer framebuffer = this.framebuffer;
         if (framebuffer == null) {
-            framebuffer =
-                new SimpleFramebuffer(window.getWidth(), window.getHeight(), true, MinecraftClient.IS_SYSTEM_MAC);
+            framebuffer = new SimpleFramebuffer(window.getFramebufferWidth(), window.getFramebufferHeight(), true,
+                MinecraftClient.IS_SYSTEM_MAC);
             framebuffer.setClearColor(0f, 0f, 0f, 0f);
             this.framebuffer = framebuffer;
         }
@@ -48,6 +54,8 @@ public class KMLOverlayMod implements ClientModInitializer {
     }
 
     private void render(WorldRenderContext ctx) {
+        if (isWindowInvalid()) return;
+
         WorldRenderContext newCtx = new OverlayWorldRenderContext(ctx);
 
         Framebuffer framebuffer = getFramebuffer();
