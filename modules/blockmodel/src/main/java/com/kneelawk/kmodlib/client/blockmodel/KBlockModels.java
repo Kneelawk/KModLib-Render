@@ -34,6 +34,7 @@ import com.kneelawk.kmodlib.client.blockmodel.cube.UnbakedBottomTopModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.cube.UnbakedColumnModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.cube.UnbakedCubeAllModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.cube.UnbakedCubeModelLayer;
+import com.kneelawk.kmodlib.client.blockmodel.modelref.ModelRefUnbakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.sprite.UnbakedSpriteSupplier;
 
 import static com.kneelawk.kmodlib.client.blockmodel.Constants.id;
@@ -103,6 +104,7 @@ public class KBlockModels {
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube_bottom_top"), UnbakedBottomTopModelLayer.CODEC);
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube_column"), UnbakedColumnModelLayer.CODEC);
         Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("cube"), UnbakedCubeModelLayer.CODEC);
+        Registry.register(BLOCK_MODEL_LAYER_REGISTRY, id("model_ref"), ModelRefUnbakedModelLayer.CODEC);
 
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("block"), BlockModelConnector.TYPE);
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("render_tag"), RenderTagModelConnector.TYPE);
@@ -120,7 +122,8 @@ public class KBlockModels {
     }
 
     @Nullable
-    private static KUnbakedModel tryLoadModel(ResourceManager manager, Identifier id, String extension, AtomicBoolean gaveFormatWarning) {
+    private static KUnbakedModel tryLoadModel(ResourceManager manager, Identifier id, String extension,
+                                              AtomicBoolean gaveFormatWarning) {
         Identifier modelId = new Identifier(id.getNamespace(), "models/" + id.getPath() + extension);
         Optional<Resource> res = manager.getResource(modelId);
         if (res.isPresent()) {
