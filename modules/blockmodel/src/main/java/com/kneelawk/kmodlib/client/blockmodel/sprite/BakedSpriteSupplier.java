@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 
@@ -22,10 +23,12 @@ public interface BakedSpriteSupplier {
      * @param state          the state of the block being baked to terrain.
      * @param pos            the position of the block.
      * @param randomSupplier the random supplier for this block.
+     * @param normal         the normal of the face that the sprite is currently being retrieved for, if any face normal
+     *                       is actually applicable.
      * @return the sprite for this block.
      */
     @Nullable Sprite getBlockSprite(BlockRenderView blockView, BlockState state, BlockPos pos,
-                                    Supplier<Random> randomSupplier);
+                                    Supplier<Random> randomSupplier, @Nullable Direction normal);
 
     /**
      * Gets the item sprite for this model.

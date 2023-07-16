@@ -12,6 +12,7 @@ import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 
@@ -31,7 +32,7 @@ public record BakedSpriteCubeModelLayer(@Nullable ModelBakeSettings rotation, bo
             BakedSpriteSupplier supplier = spriteSuppliers[i];
             if (supplier == null) continue;
 
-            sprites[i] = supplier.getBlockSprite(blockView, state, pos, randomSupplier);
+            sprites[i] = supplier.getBlockSprite(blockView, state, pos, randomSupplier, Direction.byId(i));
         }
 
         CubeModelUtils.emitCube(context.getEmitter(), rotation, cullFaces, quarterFaces, sideDepth, faceDepth,
