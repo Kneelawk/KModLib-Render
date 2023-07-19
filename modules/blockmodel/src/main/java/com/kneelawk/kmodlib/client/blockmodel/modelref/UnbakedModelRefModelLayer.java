@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
@@ -30,14 +29,14 @@ import com.kneelawk.kmodlib.client.blockmodel.JsonMaterial;
 import com.kneelawk.kmodlib.client.blockmodel.UnbakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.util.RenderUtils;
 
-public record ModelRefUnbakedModelLayer(Identifier ref, JsonMaterial material, boolean rotate)
+public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, boolean rotate)
     implements UnbakedModelLayer {
-    public static final Codec<ModelRefUnbakedModelLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Identifier.CODEC.fieldOf("ref").forGetter(ModelRefUnbakedModelLayer::ref),
+    public static final Codec<UnbakedModelRefModelLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        Identifier.CODEC.fieldOf("ref").forGetter(UnbakedModelRefModelLayer::ref),
         JsonMaterial.CODEC.optionalFieldOf("material", JsonMaterial.DEFAULT)
-            .forGetter(ModelRefUnbakedModelLayer::material),
-        Codec.BOOL.optionalFieldOf("rotate", true).forGetter(ModelRefUnbakedModelLayer::rotate)
-    ).apply(instance, ModelRefUnbakedModelLayer::new));
+            .forGetter(UnbakedModelRefModelLayer::material),
+        Codec.BOOL.optionalFieldOf("rotate", true).forGetter(UnbakedModelRefModelLayer::rotate)
+    ).apply(instance, UnbakedModelRefModelLayer::new));
 
     @Override
     public Codec<? extends UnbakedModelLayer> getCodec() {
