@@ -26,19 +26,27 @@ public class UnbakedLayeredModel implements KUnbakedModel {
         Identifier.CODEC.optionalFieldOf("transformation", DEFAULT_TRANSFORMATION)
             .forGetter(model -> model.transformation),
         Identifier.CODEC.fieldOf("particle").forGetter(model -> model.particle),
-        Codec.list(UnbakedModelLayer.CODEC).fieldOf("layers").forGetter(model -> model.layers)
+        Codec.list(UnbakedModelLayer.CODEC).fieldOf("layers").forGetter(model -> model.layers),
+        Codec.BOOL.optionalFieldOf("side_lit", true).forGetter(model -> model.sideLit)
     ).apply(instance, UnbakedLayeredModel::new));
 
     private final Identifier transformation;
     private final Identifier particle;
     private final List<UnbakedModelLayer> layers;
+    private final boolean sideLit;
 
     private @Nullable JsonUnbakedModel transformationModel = null;
 
     public UnbakedLayeredModel(Identifier transformation, Identifier particle, List<UnbakedModelLayer> layers) {
+        this(transformation, particle, layers, true);
+    }
+
+    public UnbakedLayeredModel(Identifier transformation, Identifier particle, List<UnbakedModelLayer> layers,
+                               boolean sideLit) {
         this.transformation = transformation;
         this.particle = particle;
         this.layers = layers;
+        this.sideLit = sideLit;
     }
 
     @Override
@@ -93,6 +101,6 @@ public class UnbakedLayeredModel implements KUnbakedModel {
             }
         }
 
-        return new BakedLayeredModel(transModel.getTransformations(), particleSprite, bakedLayers);
+        return new BakedLayeredModel(transModel.getTransformations(), particleSprite, bakedLayers, sideLit);
     }
 }

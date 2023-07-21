@@ -24,11 +24,14 @@ public class BakedLayeredModel implements BakedModel, FabricBakedModel {
     private final ModelTransformation transformation;
     private final Sprite particle;
     private final BakedModelLayer[] layers;
+    private final boolean sideLit;
 
-    public BakedLayeredModel(ModelTransformation transformation, Sprite particle, BakedModelLayer[] layers) {
+    public BakedLayeredModel(ModelTransformation transformation, Sprite particle, BakedModelLayer[] layers,
+                             boolean sideLit) {
         this.transformation = transformation;
         this.particle = particle;
         this.layers = layers;
+        this.sideLit = sideLit;
     }
 
     @Override
@@ -68,7 +71,7 @@ public class BakedLayeredModel implements BakedModel, FabricBakedModel {
 
     @Override
     public boolean isSideLit() {
-        return true;
+        return sideLit;
     }
 
     @Override
