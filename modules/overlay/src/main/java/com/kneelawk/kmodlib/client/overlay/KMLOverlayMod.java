@@ -56,6 +56,8 @@ public class KMLOverlayMod implements ClientModInitializer {
     private void render(WorldRenderContext ctx) {
         if (isWindowInvalid()) return;
 
+        MatrixHelper.setupProjectionMatrix(ctx);
+
         WorldRenderContext newCtx = new OverlayWorldRenderContext(ctx);
 
         Framebuffer framebuffer = getFramebuffer();
