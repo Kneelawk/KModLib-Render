@@ -3,6 +3,7 @@ package com.kneelawk.kmodlib.client.blockmodel;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.gson.JsonObject;
@@ -10,8 +11,8 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
@@ -109,16 +110,18 @@ public class KBlockModels {
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("block"), BlockModelConnector.TYPE);
         Registry.register(BLOCK_MODEL_CONNECTOR_REGISTRY, id("render_tag"), RenderTagModelConnector.TYPE);
 
-        ModelLoadingRegistry.INSTANCE.registerResourceProvider(KBlockModels::getResourceProvider);
+        PreparableModelLoadingPlugin.register(
+            (resourceManager, executor) -> CompletableFuture.completedFuture(resourceManager),
+            KBlockModels::onInitializeModeLoader);
     }
 
-    private static ModelResourceProvider getResourceProvider(ResourceManager manager) {
-        return (id, ctx) -> {
-            KUnbakedModel model = tryLoadModel(manager, id, MODEL_EXTENSION_1, GAVE_FORMAT_WARNING_1);
+    private static void onInitializeModeLoader(ResourceManager manager, ModelLoadingPlugin.Context context) {
+        context.resolveModel().register(ctx -> {
+            KUnbakedModel model = tryLoadModel(manager, ctx.id(), MODEL_EXTENSION_1, GAVE_FORMAT_WARNING_1);
             if (model != null) return model;
 
-            return tryLoadModel(manager, id, MODEL_EXTENSION_2, GAVE_FORMAT_WARNING_2);
-        };
+            return tryLoadModel(manager, ctx.id(), MODEL_EXTENSION_2, GAVE_FORMAT_WARNING_2);
+        });
     }
 
     @Nullable
