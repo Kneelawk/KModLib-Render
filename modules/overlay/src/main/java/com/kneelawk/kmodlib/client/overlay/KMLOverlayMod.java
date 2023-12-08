@@ -8,6 +8,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.systems.VertexSorter;
@@ -15,8 +17,12 @@ import com.mojang.blaze3d.systems.VertexSorter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.SimpleFramebuffer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.Window;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 public class KMLOverlayMod implements ClientModInitializer {
     private final MinecraftClient MC = MinecraftClient.getInstance();
@@ -56,7 +62,7 @@ public class KMLOverlayMod implements ClientModInitializer {
     private void render(WorldRenderContext ctx) {
         if (isWindowInvalid()) return;
 
-        MatrixHelper.setupProjectionMatrix(ctx);
+        RenderSystem.setProjectionMatrix(ctx.projectionMatrix(), VertexSorter.BY_DISTANCE);
 
         WorldRenderContext newCtx = new OverlayWorldRenderContext(ctx);
 
@@ -66,6 +72,33 @@ public class KMLOverlayMod implements ClientModInitializer {
         framebuffer.beginWrite(false);
 
         RenderToOverlay.EVENT.invoker().renderToOverlay(newCtx);
+
+        MatrixStack stack = ctx.matrixStack();
+        stack.push();
+        Vec3d cameraPos = ctx.camera().getPos();
+        stack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        RenderUtils.drawCube(stack, RenderToOverlay.CONSUMERS.getBuffer(RenderLayer.LINES), 0f, 64f, 0f, 0.5f, 0.5f,
+            0.5f, 0xFFFFFFFF);
+        stack.pop();
+
+        ((VertexConsumerProvider.Immediate) RenderToOverlay.CONSUMERS).draw();
+
+        RenderSystem.setProjectionMatrix(new Matrix4f(), VertexSorter.BY_Z);
+
+        stack.push();
+        stack.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+        Matrix4f proj = ctx.projectionMatrix();
+        Matrix4f mvp = proj.mul(stack.peek().getPositionMatrix(), new Matrix4f());
+        Vector4f posVec = new Vector4f(0f, 64f, 0f, 1f);
+        posVec.mul(mvp);
+        posVec.mul(1f / posVec.w);
+        posVec.x *= framebuffer.textureWidth;
+        posVec.y *= framebuffer.textureHeight;
+        stack.loadIdentity();
+        stack.scale(1f / framebuffer.textureWidth, 1f / framebuffer.textureHeight, 1f);
+        RenderUtils.drawRect(stack, RenderToOverlay.CONSUMERS.getBuffer(RenderLayer.LINES), posVec.x, posVec.y,
+            posVec.z, 25f, 25f, Direction.SOUTH, 0xFFFFFFFF);
+        stack.pop();
 
         ((VertexConsumerProvider.Immediate) RenderToOverlay.CONSUMERS).draw();
 
