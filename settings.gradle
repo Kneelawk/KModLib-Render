@@ -28,7 +28,7 @@ rootProject.name = 'kmodlib-all'
 void module(String name) {
     String projectName = ":kmodlib-$name"
     include(projectName)
-    project(projectName).projectDir = file("modules/$name")
+    project(projectName).projectDir = file("modules/${name.replace(':', '/')}")
 }
 
 module 'blockmodel'

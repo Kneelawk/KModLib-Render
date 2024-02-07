@@ -32,13 +32,17 @@ public class SubmodulePlugin implements Plugin<Project> {
 
         SubmoduleExtension submodule = ext.create("submodule", SubmoduleExtension.class);
         Property<Boolean> isRoot = submodule.getRoot();
-        Provider<String> suffix = submodule.getSuffix().map(s -> "-" + s);
+        Property<String> suffixProp = submodule.getSuffix();
+        Provider<String> suffix = suffixProp.map(s -> "-" + s);
+        Property<String> docsSuffixProp = submodule.getDocsSuffix();
+        Provider<String> docsSuffix = docsSuffixProp.map(s -> "-" + s);
 
         isRoot.convention(false);
+        docsSuffixProp.convention(suffixProp);
 
-        String archivesBaseName = (String) project.property("archives_base_name");
-        if (archivesBaseName == null)
-            throw new IllegalStateException("Submodule plugin requires the `archives_base_name` property.");
+        String baseName = (String) project.property("base_name");
+        if (baseName == null)
+            throw new IllegalStateException("Submodule plugin requires the `base_name` property.");
 
         String mavenGroup = (String) project.property("maven_group");
         if (mavenGroup == null)
@@ -59,7 +63,7 @@ public class SubmodulePlugin implements Plugin<Project> {
         JavaPluginExtension java = ext.getByType(JavaPluginExtension.class);
         PublishingExtension publishing = ext.getByType(PublishingExtension.class);
 
-        base.getArchivesName().convention(suffix.map(s -> archivesBaseName + s));
+        base.getArchivesName().convention(suffix.map(s -> baseName + s));
 
         // Setup minecraft dependency
         dependencies.add("minecraft", "com.mojang:minecraft:" + minecraftVersion);
@@ -81,9 +85,7 @@ public class SubmodulePlugin implements Plugin<Project> {
         java.setSourceCompatibility(JavaVersion.VERSION_17);
         java.setTargetCompatibility(JavaVersion.VERSION_17);
 
-        // configure the maven publication
-        publishing.getPublications()
-            .create("mavenJava", MavenPublication.class, pub -> pub.from(project.getComponents().getByName("java")));
+        // Configure the maven repo
         if (publishRepo != null) {
             publishing.getRepositories().maven(repo -> {
                 repo.setName("publishRepo");
@@ -109,10 +111,17 @@ public class SubmodulePlugin implements Plugin<Project> {
 
                 JavaPluginExtension rootJava = rootExt.getByType(JavaPluginExtension.class);
                 java.getDocsDir().convention(
-                    rootJava.getDocsDir().flatMap(docsDir -> suffix.map(s -> docsDir.dir(archivesBaseName + s))));
+                    rootJava.getDocsDir().flatMap(docsDir -> docsSuffix.map(s -> docsDir.dir(baseName + s))));
             }
 
-            // fix issue with just running `genSources`
+            // Configure the maven publication
+            publishing.getPublications()
+                .create("mavenJava", MavenPublication.class, pub -> {
+                    pub.setArtifactId(baseName + suffix.get());
+                    pub.from(project.getComponents().getByName("java"));
+                });
+
+            // Fix issue with just running `genSources`
             tasks.named("genSourcesWithVineflower", task -> {
                 task.dependsOn(rootProject.getAllprojects().stream()
                     .map(subProj2 -> subProj2.getTasks().named("resolveVineflower")).toArray());
