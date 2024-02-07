@@ -53,10 +53,6 @@ public class SubmodulePlugin implements Plugin<Project> {
         if (yarnMappings == null)
             throw new IllegalStateException("Submodule plugin requires the `yarn_mappings` property.");
 
-        String loaderVersion = (String) project.property("loader_version");
-        if (loaderVersion == null)
-            throw new IllegalStateException("Submodule plugin requires the `loader_version` property.");
-
         String publishRepo = System.getenv("PUBLISH_REPO");
 
         BasePluginExtension base = ext.getByType(BasePluginExtension.class);
@@ -68,10 +64,6 @@ public class SubmodulePlugin implements Plugin<Project> {
         // Setup minecraft dependency
         dependencies.add("minecraft", "com.mojang:minecraft:" + minecraftVersion);
         dependencies.add("mappings", "net.fabricmc:yarn:" + yarnMappings + ":v2");
-        // Fabric loader
-        String fabricLoaderDep = "net.fabricmc:fabric-loader:" + loaderVersion;
-        dependencies.add("modCompileOnly", fabricLoaderDep);
-        dependencies.add("modLocalRuntime", fabricLoaderDep);
 
         tasks.named("processResources", Copy.class, pr -> {
             pr.getInputs().property("version", project.getVersion());
