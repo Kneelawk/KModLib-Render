@@ -1,6 +1,5 @@
 package com.kneelawk.submodule;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -107,7 +106,7 @@ public class SubmodulePlugin implements Plugin<Project> {
         });
 
         project.afterEvaluate(proj -> {
-            tasks.named("genSources", task -> task.setDependsOn(List.of("genSourcesWithQuiltflower")));
+            tasks.named("genSources", task -> task.setDependsOn(List.of("genSourcesWithVineflower")));
 
             tasks.named("jar", Jar.class, jar -> jar.from(rootProject.file("LICENSE"),
                 spec -> spec.rename(name -> name + "_" + base.getArchivesName().get())));
@@ -122,9 +121,12 @@ public class SubmodulePlugin implements Plugin<Project> {
             }
 
             // fix issue with just running `genSources`
-            tasks.named("genSourcesWithQuiltflower", task -> {
-                task.dependsOn(rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("resolveQuiltflower")).toArray());
-                task.dependsOn(rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar")).toArray());
+            tasks.named("genSourcesWithVineflower", task -> {
+                task.dependsOn(rootProject.getAllprojects().stream()
+                    .map(subProj2 -> subProj2.getTasks().named("resolveVineflower")).toArray());
+                task.dependsOn(
+                    rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar"))
+                        .toArray());
             });
         });
     }
