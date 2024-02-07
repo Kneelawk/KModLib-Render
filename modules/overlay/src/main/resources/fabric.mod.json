@@ -24,7 +24,6 @@
     ]
   },
   "mixins": [
-    "kmodlib-overlay.mixins.json"
   ],
 
   "depends": {
