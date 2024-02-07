@@ -23,9 +23,7 @@
       "com.kneelawk.kmodlib.client.overlay.KMLOverlayMod"
     ]
   },
-  "mixins": [
-    "kmodlib-overlay.mixins.json"
-  ],
+  "mixins": [ ],
 
   "depends": {
     "fabricloader": ">=0.14.17",

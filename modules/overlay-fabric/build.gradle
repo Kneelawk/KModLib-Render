@@ -6,7 +6,7 @@ plugins {
 }
 
 submodule {
-    suffix = 'overlay'
+    suffix = 'overlay-fabric'
 }
 
 repositories {

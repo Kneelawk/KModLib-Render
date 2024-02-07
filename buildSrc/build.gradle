@@ -14,15 +14,3 @@ gradlePlugin {
         }
     }
 }
-
-repositories {
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
-    mavenCentral()
-}
-
-dependencies {
-    implementation "fabric-loom:fabric-loom.gradle.plugin:1.5.7"
-}

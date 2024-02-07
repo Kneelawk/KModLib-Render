@@ -75,6 +75,7 @@ public class SubmodulePlugin implements Plugin<Project> {
             pr.exclude("**/*.xcf");
 
             pr.filesMatching("fabric.mod.json", details -> details.expand(Map.of("version", project.getVersion())));
+            pr.filesMatching("META-INF/mods.toml", details -> details.expand(Map.of("version", project.getVersion())));
         });
 
         // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.

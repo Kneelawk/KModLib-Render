@@ -32,7 +32,8 @@ void module(String name) {
 }
 
 module 'blockmodel'
-module 'overlay'
+module 'overlay-fabric'
+module 'overlay-neoforge'
 module 'renderlayer'
 module 'rendertag'
 

@@ -38,8 +38,8 @@ dependencies {
     api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
     include project(":kmodlib-blockmodel")
 
-    api project(path: ":kmodlib-overlay", configuration: "namedElements")
-    include project(":kmodlib-overlay")
+    api project(path: ":kmodlib-overlay-fabric", configuration: "namedElements")
+    include project(":kmodlib-overlay-fabric")
 
     api project(path: ":kmodlib-renderlayer", configuration: "namedElements")
     include project(":kmodlib-renderlayer")

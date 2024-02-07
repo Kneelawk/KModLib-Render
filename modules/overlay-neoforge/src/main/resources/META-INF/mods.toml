@@ -1,0 +1,19 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+
+[[mods]]
+modId = "kmodlib_overlay"
+version = "${version}"
+displayName = "KModLib Overlay"
+authors = "Kneelawk"
+description = "Provides a custom \"overlay\" framebuffer for rendering things on top of terrain."
+logoFile = "assets/kmodlib_overlay/icon.png"
+displayTest="IGNORE_ALL_VERSION"
+
+[[dependencies.kmodlib_overlay]]
+modId = "neoforge"
+type = "REQUIRED"
+versionRange = "[20.4.148-beta,)"
+ordering = "NONE"
+side = "BOTH"
