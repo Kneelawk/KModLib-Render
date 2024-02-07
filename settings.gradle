@@ -4,22 +4,36 @@ pluginManagement {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        maven {
+            name = 'Architectury'
+            url = 'https://maven.architectury.dev/'
+        }
+        maven {
+            name = 'NeoForged'
+            url = 'https://maven.neoforged.net/releases/'
+        }
         mavenCentral()
         gradlePluginPortal()
     }
     plugins {
         id 'fabric-loom' version settings.loom_version
+        id 'architectury-plugin' version settings.architectury_version
+        id 'dev.architectury.loom' version settings.architectury_loom_version
+        id 'com.github.johnrengelman.shadow' version settings.shadow_version
     }
 }
 
 rootProject.name = 'kmodlib-all'
 
-include ':kmodlib-blockmodel'
-include ':kmodlib-overlay'
-include ':kmodlib-renderlayer'
-include ':kmodlib-rendertag'
+void module(String name) {
+    String projectName = ":kmodlib-$name"
+    include(projectName)
+    project(projectName).projectDir = file("modules/$name")
+}
 
-project(':kmodlib-blockmodel').projectDir = file('modules/blockmodel')
-project(':kmodlib-overlay').projectDir = file('modules/overlay')
-project(':kmodlib-renderlayer').projectDir = file('modules/renderlayer')
-project(':kmodlib-rendertag').projectDir = file('modules/rendertag')
+module 'blockmodel'
+module 'overlay'
+module 'renderlayer'
+module 'rendertag'
+
+module 'all-fabric'

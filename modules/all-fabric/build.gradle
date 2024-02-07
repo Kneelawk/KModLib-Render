@@ -1,0 +1,52 @@
+plugins {
+    id 'base'
+    id 'java'
+    id 'fabric-loom'
+    id 'maven-publish'
+    id 'com.kneelawk.versioning'
+    id 'com.kneelawk.submodule'
+}
+
+submodule {
+    suffix = 'all-fabric'
+}
+
+loom {
+    runs {
+        client {
+            programArgs('--width', '1280', '--height', '720')
+            ideConfigGenerated true
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "TerraformersMC"
+        url = "https://maven.terraformersmc.com/releases/"
+    }
+}
+
+dependencies {
+    modCompileOnly "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modLocalRuntime "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+//    modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
+    include project(":kmodlib-blockmodel")
+
+    api project(path: ":kmodlib-overlay", configuration: "namedElements")
+    include project(":kmodlib-overlay")
+
+    api project(path: ":kmodlib-renderlayer", configuration: "namedElements")
+    include project(":kmodlib-renderlayer")
+
+    // Mod Menu
+    modLocalRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+        exclude group: 'net.fabricmc'
+        exclude group: 'net.fabricmc.fabric-api'
+    }
+}

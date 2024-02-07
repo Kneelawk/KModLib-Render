@@ -1,9 +1,15 @@
 # gradle
 
 .gradle/
-build/
 out/
+!**/src/main/**/out/
+!**/src/test/**/out/
 classes/
+!**/src/main/**/classes/
+!**/src/test/**/classes/
+dist/
+!**/src/main/**/dist/
+!**/src/test/**/dist/
 
 # eclipse
 
@@ -15,12 +21,17 @@ classes/
 *.iml
 *.ipr
 *.iws
+logs/
+!**/src/main/**/logs/
+!**/src/test/**/logs/
 
 # vscode
 
 .settings/
 .vscode/
 bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 .classpath
 .project
 
@@ -31,6 +42,8 @@ bin/
 # fabric
 
 run/
+!**/src/main/**/run/
+!**/src/test/**/run/
 
 # java
 
@@ -43,4 +56,6 @@ replay_*.log
 .gradle
 
 # Ignore Gradle build output directory
-build
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/

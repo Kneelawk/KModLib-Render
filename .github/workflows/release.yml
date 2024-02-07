@@ -33,6 +33,15 @@ jobs:
       - name: Get Tag Version
         uses: dawidd6/action-get-tag@v1
         id: tag_version
+      - name: Get Project Version
+        # script to remove the 'v' from the beginning of the tag version
+        uses: actions/github-script@v6
+        id: project_version
+        env:
+          TAG_VERSION: ${{ steps.tag_version.outputs.tag }}
+        with:
+          script: return process.env.TAG_VERSION.substring(1)
+          result-encoding: string
       - name: Checkout
         uses: actions/checkout@v3
       - name: Validate Gradle Wrapper
@@ -52,40 +61,6 @@ jobs:
         with:
           name: build-dir
           path: build/
-      - name: Capture Module Build Directories
-        uses: actions/upload-artifact@v2
-        with:
-          name: module-build-dirs
-          path: modules/*/build/
-      - name: Capture Gradle Directory
-        uses: actions/upload-artifact@v2
-        with:
-          name: gradle-dir
-          path: .gradle/
-      - name: Capture Gradle Wrappers
-        uses: actions/upload-artifact@v2
-        with:
-          name: gradle-wrapper
-          path: ~/.gradle/wrapper/
-      - name: Capture Gradle Caches
-        uses: actions/upload-artifact@v2
-        with:
-          name: gradle-caches
-          path: ~/.gradle/caches/
-  github:
-    runs-on: ubuntu-latest
-    needs: build-release
-    steps:
-      - name: Get Tag Version
-        uses: dawidd6/action-get-tag@v1
-        id: tag_version
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Grab Builds
-        uses: actions/download-artifact@v3
-        with:
-          name: build-dir
-          path: build/
       - name: Github Release
         uses: softprops/action-gh-release@v1
         with:
@@ -93,57 +68,6 @@ jobs:
           files: build/libs/*
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-  maven:
-    runs-on: ubuntu-latest
-    needs: build-release
-    steps:
-      - name: Get Tag Version
-        uses: dawidd6/action-get-tag@v1
-        id: tag_version
-      - name: Get Project Version
-        # script to remove the 'v' from the beginning of the tag version
-        uses: actions/github-script@v6
-        id: project_version
-        env:
-          TAG_VERSION: ${{ steps.tag_version.outputs.tag }}
-        with:
-          script: return process.env.TAG_VERSION.substring(1)
-          result-encoding: string
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Grab Builds
-        uses: actions/download-artifact@v3
-        with:
-          name: build-dir
-          path: build/
-      - name: Grab Module Builds
-        uses: actions/download-artifact@v3
-        with:
-          name: module-build-dirs
-          path: modules/
-      - name: Grab Gradle Directory
-        uses: actions/download-artifact@v3
-        with:
-          name: gradle-dir
-          path: .gradle/
-      - name: Grab Gradle Wrappers
-        uses: actions/download-artifact@v3
-        with:
-          name: gradle-wrapper
-          path: ~/.gradle/wrapper/
-      - name: Grab Gradle Caches
-        uses: actions/download-artifact@v3
-        with:
-          name: gradle-caches
-          path: ~/.gradle/caches/
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Setup JDK 17
-        uses: actions/setup-java@v1
-        with:
-          java-version: 17
-      - name: Make Gradle Wrapper Executable
-        run: chmod +x ./gradlew
       # Next is the rather cursed maven and javadoc deployment mechanism
       - name: Checkout Deployment Repository
         uses: actions/checkout@v3
