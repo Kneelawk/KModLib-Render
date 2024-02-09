@@ -34,7 +34,5 @@ repositories {
 }
 
 dependencies {
-    mappings loom.officialMojangMappings()
-
     neoForge "net.neoforged:neoforge:${project.neoforge_version}"
 }
