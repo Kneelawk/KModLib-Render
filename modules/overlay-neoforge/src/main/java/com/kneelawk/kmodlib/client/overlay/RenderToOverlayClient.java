@@ -1,5 +1,7 @@
 package com.kneelawk.kmodlib.client.overlay;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -10,41 +12,37 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import org.joml.Matrix4f;
-
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.systems.VertexSorter;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.SimpleFramebuffer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.Window;
+import com.mojang.blaze3d.vertex.VertexSorting;
 
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class RenderToOverlayClient {
-    private static @Nullable Framebuffer framebuffer = null;
+    private static @Nullable RenderTarget framebuffer = null;
 
     private static boolean isWindowInvalid() {
-        Window window = MinecraftClient.getInstance().getWindow();
+        Window window = Minecraft.getInstance().getWindow();
 
-        return window.getWidth() == 0 || window.getHeight() == 0;
+        return window.getScreenWidth() == 0 || window.getScreenHeight() == 0;
     }
 
-    private static @NotNull Framebuffer getFramebuffer() {
-        Window window = MinecraftClient.getInstance().getWindow();
+    private static @NotNull RenderTarget getFramebuffer() {
+        Window window = Minecraft.getInstance().getWindow();
 
-        Framebuffer framebuffer = RenderToOverlayClient.framebuffer;
+        RenderTarget framebuffer = RenderToOverlayClient.framebuffer;
         if (framebuffer == null) {
-            framebuffer = new SimpleFramebuffer(window.getFramebufferWidth(), window.getFramebufferHeight(), true,
-                MinecraftClient.IS_SYSTEM_MAC);
+            framebuffer = new TextureTarget(window.getWidth(), window.getHeight(), true,
+                Minecraft.ON_OSX);
             framebuffer.setClearColor(0f, 0f, 0f, 0f);
             RenderToOverlayClient.framebuffer = framebuffer;
         }
 
-        if (window.getFramebufferWidth() != framebuffer.textureWidth ||
-            window.getFramebufferHeight() != framebuffer.textureHeight) {
-            framebuffer.resize(window.getFramebufferWidth(), window.getFramebufferHeight(),
-                MinecraftClient.IS_SYSTEM_MAC);
+        if (window.getWidth() != framebuffer.width ||
+            window.getHeight() != framebuffer.height) {
+            framebuffer.resize(window.getWidth(), window.getHeight(),
+                Minecraft.ON_OSX);
         }
 
         return framebuffer;
@@ -55,14 +53,14 @@ public class RenderToOverlayClient {
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
             if (isWindowInvalid()) return;
 
-            MinecraftClient mc = MinecraftClient.getInstance();
+            Minecraft mc = Minecraft.getInstance();
 
-            RenderSystem.setProjectionMatrix(event.getProjectionMatrix(), VertexSorter.BY_DISTANCE);
+            RenderSystem.setProjectionMatrix(event.getProjectionMatrix(), VertexSorting.DISTANCE_TO_ORIGIN);
 
-            Framebuffer framebuffer = getFramebuffer();
-            framebuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
+            RenderTarget framebuffer = getFramebuffer();
+            framebuffer.clear(Minecraft.ON_OSX);
 
-            framebuffer.beginWrite(false);
+            framebuffer.bindWrite(false);
 
             NeoForge.EVENT_BUS.post(
                 new RenderToOverlayEvent(event.getLevelRenderer(), event.getPoseStack(), event.getProjectionMatrix(),
@@ -70,15 +68,15 @@ public class RenderToOverlayClient {
                     RenderToOverlay.CONSUMERS));
 //            testRender(event.getPoseStack(), event.getCamera().getPos());
 
-            ((VertexConsumerProvider.Immediate) RenderToOverlay.CONSUMERS).draw();
+            ((MultiBufferSource.BufferSource) RenderToOverlay.CONSUMERS).endBatch();
 
-            mc.getFramebuffer().beginWrite(false);
+            mc.getMainRenderTarget().bindWrite(false);
 
             // Framebuffer.draw() messes with the projection matrix, so we're keeping a backup.
             Matrix4f projBackup = RenderSystem.getProjectionMatrix();
-            VertexSorter sorterBackup = RenderSystem.getVertexSorting();
+            VertexSorting sorterBackup = RenderSystem.getVertexSorting();
             RenderSystem.enableBlend();
-            framebuffer.draw(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight(), false);
+            framebuffer.blitToScreen(mc.getWindow().getWidth(), mc.getWindow().getHeight(), false);
             RenderSystem.disableBlend();
             RenderSystem.setProjectionMatrix(projBackup, sorterBackup);
         }

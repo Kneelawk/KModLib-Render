@@ -1,31 +1,30 @@
 package com.kneelawk.kmodlib.client.overlay;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.neoforged.bus.api.Event;
 
 import org.joml.Matrix4f;
-
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * Fired in order to render to the overlay.
  */
 public class RenderToOverlayEvent extends Event {
-    private final WorldRenderer levelRenderer;
-    private final MatrixStack poseStack;
+    private final LevelRenderer levelRenderer;
+    private final PoseStack poseStack;
     private final Matrix4f projectionMatrix;
     private final int renderTick;
     private final float partialTick;
     private final Camera camera;
     private final Frustum frustum;
-    private final VertexConsumerProvider provider;
+    private final MultiBufferSource provider;
 
-    public RenderToOverlayEvent(WorldRenderer levelRenderer, MatrixStack poseStack, Matrix4f projectionMatrix,
+    public RenderToOverlayEvent(LevelRenderer levelRenderer, PoseStack poseStack, Matrix4f projectionMatrix,
                                 int renderTick, float partialTick, Camera camera, Frustum frustum,
-                                VertexConsumerProvider provider) {
+                                MultiBufferSource provider) {
         this.levelRenderer = levelRenderer;
         this.poseStack = poseStack;
         this.projectionMatrix = projectionMatrix;
@@ -36,11 +35,11 @@ public class RenderToOverlayEvent extends Event {
         this.provider = provider;
     }
 
-    public WorldRenderer getLevelRenderer() {
+    public LevelRenderer getLevelRenderer() {
         return levelRenderer;
     }
 
-    public MatrixStack getPoseStack() {
+    public PoseStack getPoseStack() {
         return poseStack;
     }
 
@@ -64,7 +63,7 @@ public class RenderToOverlayEvent extends Event {
         return frustum;
     }
 
-    public VertexConsumerProvider getProvider() {
+    public MultiBufferSource getProvider() {
         return provider;
     }
 }

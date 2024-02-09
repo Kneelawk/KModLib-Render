@@ -67,7 +67,7 @@ public class SubmodulePlugin implements Plugin<Project> {
 
         // Setup minecraft dependency
         dependencies.add("minecraft", "com.mojang:minecraft:" + minecraftVersion);
-        dependencies.add("mappings", "net.fabricmc:yarn:" + yarnMappings + ":v2");
+//        dependencies.add("mappings", "net.fabricmc:yarn:" + yarnMappings + ":v2");
 
         tasks.named("processResources", Copy.class, pr -> {
             pr.getInputs().property("version", project.getVersion());
@@ -123,13 +123,13 @@ public class SubmodulePlugin implements Plugin<Project> {
                 });
 
             // Fix issue with just running `genSources`
-            tasks.named("genSourcesWithVineflower", task -> {
-                task.dependsOn(rootProject.getAllprojects().stream()
-                    .map(subProj2 -> subProj2.getTasks().named("resolveVineflower")).toArray());
-                task.dependsOn(
-                    rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar"))
-                        .toArray());
-            });
+//            tasks.named("genSourcesWithVineflower", task -> {
+//                task.dependsOn(rootProject.getAllprojects().stream()
+//                    .map(subProj2 -> subProj2.getTasks().named("resolveVineflower")).toArray());
+//                task.dependsOn(
+//                    rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar"))
+//                        .toArray());
+//            });
         });
     }
 }
