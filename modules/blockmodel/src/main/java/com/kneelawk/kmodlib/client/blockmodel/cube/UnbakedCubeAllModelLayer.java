@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.client.render.model.Baker;
@@ -25,7 +26,7 @@ import com.kneelawk.kmodlib.client.blockmodel.util.CubeModelUtils;
 
 public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, float depth, boolean cullFaces,
                                        boolean rotate, boolean quarterFaces) implements UnbakedModelLayer {
-    public static final Codec<UnbakedCubeAllModelLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<UnbakedCubeAllModelLayer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         JsonTexture.CODEC.fieldOf("all").forGetter(UnbakedCubeAllModelLayer::all),
         JsonMaterial.CODEC.optionalFieldOf("material", JsonMaterial.DEFAULT)
             .forGetter(UnbakedCubeAllModelLayer::material),
@@ -52,7 +53,7 @@ public record UnbakedCubeAllModelLayer(JsonTexture all, JsonMaterial material, f
     }
 
     @Override
-    public Codec<? extends UnbakedModelLayer> getCodec() {
+    public MapCodec<? extends UnbakedModelLayer> getCodec() {
         return CODEC;
     }
 

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
@@ -18,8 +19,8 @@ public record UnbakedStaticSpriteSupplier(Identifier sprite) implements UnbakedS
         Identifier.CODEC.xmap(UnbakedStaticSpriteSupplier::new, UnbakedStaticSpriteSupplier::sprite);
 
     @Override
-    public Codec<? extends UnbakedSpriteSupplier> getCodec() {
-        return CODEC;
+    public MapCodec<? extends UnbakedSpriteSupplier> getCodec() {
+        throw new UnsupportedOperationException("UnbakedStaticSpriteSupplier does not have a map codec");
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.kneelawk.kmodlib.client.blockmodel;
 import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.client.render.model.UnbakedModel;
 
@@ -19,5 +20,5 @@ public interface KUnbakedModel extends UnbakedModel {
     /**
      * @return the codec registered with {@link KBlockModels#BLOCK_MODEL_REGISTRY}.
      */
-    Codec<? extends KUnbakedModel> getCodec();
+    MapCodec<? extends KUnbakedModel> getCodec();
 }

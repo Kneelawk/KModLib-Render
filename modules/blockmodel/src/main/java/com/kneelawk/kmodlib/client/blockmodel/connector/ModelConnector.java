@@ -3,6 +3,7 @@ package com.kneelawk.kmodlib.client.blockmodel.connector;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
@@ -31,7 +32,7 @@ public interface ModelConnector {
     Codec<ModelConnector> CODEC = Codec.either(Identifier.CODEC,
         KBlockModels.BLOCK_MODEL_CONNECTOR_REGISTRY.getCodec().dispatch(ModelConnector::getType, type -> {
             // this should only ever happen if an object was decoded with a type corresponding to a singleton type
-            if (type instanceof Singleton s) return Codec.unit(s.instance());
+            if (type instanceof Singleton s) return MapCodec.unit(s.instance());
 
                 // return the decodable's codec, so we can decode an object
             else if (type instanceof Decodable d) return d.codec();
@@ -118,6 +119,6 @@ public interface ModelConnector {
      *
      * @param codec the codec used for encoding and decoding instances of the model connector.
      */
-    record Decodable(Codec<? extends ModelConnector> codec) implements Type {
+    record Decodable(MapCodec<? extends ModelConnector> codec) implements Type {
     }
 }

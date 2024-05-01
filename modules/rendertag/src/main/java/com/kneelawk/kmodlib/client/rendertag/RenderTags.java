@@ -111,7 +111,7 @@ public final class RenderTags
                         try (BufferedReader reader = res.getReader()) {
                             JsonRenderTag json =
                                 JsonRenderTag.CODEC.decode(JsonOps.INSTANCE, JsonHelper.deserialize(reader))
-                                    .getOrThrow(false, KLog.LOG::error).getFirst();
+                                    .getOrThrow().getFirst();
 
                             if (json.replace()) {
                                 keysBuilder = ImmutableSet.builder();

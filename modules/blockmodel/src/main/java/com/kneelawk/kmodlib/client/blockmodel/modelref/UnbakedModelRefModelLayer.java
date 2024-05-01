@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.client.render.model.BakedModel;
@@ -33,7 +34,7 @@ import com.kneelawk.kmodlib.client.blockmodel.util.RenderUtils;
 
 public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, boolean rotate)
     implements UnbakedModelLayer {
-    public static final Codec<UnbakedModelRefModelLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<UnbakedModelRefModelLayer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.fieldOf("ref").forGetter(UnbakedModelRefModelLayer::ref),
         JsonMaterial.CODEC.optionalFieldOf("material", JsonMaterial.DEFAULT)
             .forGetter(UnbakedModelRefModelLayer::material),
@@ -41,7 +42,7 @@ public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, b
     ).apply(instance, UnbakedModelRefModelLayer::new));
 
     @Override
-    public Codec<? extends UnbakedModelLayer> getCodec() {
+    public MapCodec<? extends UnbakedModelLayer> getCodec() {
         return CODEC;
     }
 

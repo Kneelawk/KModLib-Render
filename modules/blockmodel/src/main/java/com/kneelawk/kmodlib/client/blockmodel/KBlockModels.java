@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlu
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.Lifecycle;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -54,25 +55,25 @@ public class KBlockModels {
     private static final Identifier BLOCK_MODEL_LAYER_REGISTRY_ID = id("block_model_layer");
     private static final Identifier BLOCK_MODEL_CONNECTOR_REGISTRY_ID = id("block_model_connector");
     private static final Identifier SPRITE_SUPPLIER_REGISTRY_ID = id("sprite_supplier");
-    private static final RegistryKey<Registry<Codec<? extends KUnbakedModel>>> BLOCK_MODEL_REGISTRY_KEY =
+    private static final RegistryKey<Registry<MapCodec<? extends KUnbakedModel>>> BLOCK_MODEL_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_REGISTRY_ID);
-    private static final RegistryKey<Registry<Codec<? extends UnbakedModelLayer>>> BLOCK_MODEL_LAYER_REGISTRY_KEY =
+    private static final RegistryKey<Registry<MapCodec<? extends UnbakedModelLayer>>> BLOCK_MODEL_LAYER_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_LAYER_REGISTRY_ID);
     private static final RegistryKey<Registry<ModelConnector.Type>> BLOCK_MODEL_CONNECTOR_REGISTRY_KEY =
         RegistryKey.ofRegistry(BLOCK_MODEL_CONNECTOR_REGISTRY_ID);
-    private static final RegistryKey<Registry<Codec<? extends UnbakedSpriteSupplier>>> SPRITE_SUPPLIER_REGISTRY_KEY =
+    private static final RegistryKey<Registry<MapCodec<? extends UnbakedSpriteSupplier>>> SPRITE_SUPPLIER_REGISTRY_KEY =
         RegistryKey.ofRegistry(SPRITE_SUPPLIER_REGISTRY_ID);
 
     /**
      * Registry for registering codecs of {@link KUnbakedModel}s in.
      */
-    public static final Registry<Codec<? extends KUnbakedModel>> BLOCK_MODEL_REGISTRY =
+    public static final Registry<MapCodec<? extends KUnbakedModel>> BLOCK_MODEL_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_REGISTRY_KEY, Lifecycle.stable());
 
     /**
      * Registry for registering codecs of {@link UnbakedModelLayer}s in.
      */
-    public static final Registry<Codec<? extends UnbakedModelLayer>> BLOCK_MODEL_LAYER_REGISTRY =
+    public static final Registry<MapCodec<? extends UnbakedModelLayer>> BLOCK_MODEL_LAYER_REGISTRY =
         new SimpleRegistry<>(BLOCK_MODEL_LAYER_REGISTRY_KEY, Lifecycle.stable());
 
     /**
@@ -84,7 +85,7 @@ public class KBlockModels {
     /**
      * Registry for registering codecs of {@link UnbakedSpriteSupplier}s in.
      */
-    public static final Registry<Codec<? extends UnbakedSpriteSupplier>> SPRITE_SUPPLIER_REGISTRY =
+    public static final Registry<MapCodec<? extends UnbakedSpriteSupplier>> SPRITE_SUPPLIER_REGISTRY =
         new SimpleRegistry<>(SPRITE_SUPPLIER_REGISTRY_KEY, Lifecycle.stable());
 
     private static final AtomicBoolean GAVE_FORMAT_WARNING_1 = new AtomicBoolean(false);
@@ -93,9 +94,9 @@ public class KBlockModels {
     @SuppressWarnings("unchecked")
     @ApiStatus.Internal
     public static void init() {
-        Registry.register((Registry<? super Registry<Codec<? extends KUnbakedModel>>>) Registries.REGISTRIES,
+        Registry.register((Registry<? super Registry<?>>) Registries.REGISTRIES,
             BLOCK_MODEL_REGISTRY_ID, BLOCK_MODEL_REGISTRY);
-        Registry.register((Registry<? super Registry<Codec<? extends UnbakedModelLayer>>>) Registries.REGISTRIES,
+        Registry.register((Registry<? super Registry<?>>) Registries.REGISTRIES,
             BLOCK_MODEL_LAYER_REGISTRY_ID, BLOCK_MODEL_LAYER_REGISTRY);
 
         Registry.register(BLOCK_MODEL_REGISTRY, id("layered"), UnbakedLayeredModel.CODEC);

@@ -6,6 +6,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.client.render.model.Baker;
 import net.minecraft.client.render.model.ModelBakeSettings;
@@ -27,7 +28,7 @@ public interface UnbakedModelLayer {
     /**
      * @return the codec registered with {@link KBlockModels#BLOCK_MODEL_LAYER_REGISTRY}.
      */
-    Codec<? extends UnbakedModelLayer> getCodec();
+    MapCodec<? extends UnbakedModelLayer> getCodec();
 
     /**
      * @return the identifiers of the models this model layer depends on.

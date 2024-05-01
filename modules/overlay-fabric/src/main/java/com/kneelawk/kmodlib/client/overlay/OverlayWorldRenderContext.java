@@ -67,6 +67,11 @@ class OverlayWorldRenderContext implements WorldRenderContext {
     }
 
     @Override
+    public Matrix4f positionMatrix() {
+        return delegate.positionMatrix();
+    }
+
+    @Override
     public ClientWorld world() {
         return delegate.world();
     }

@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.client.render.model.BakedModel;
@@ -22,7 +23,7 @@ import net.minecraft.util.Identifier;
 
 public class UnbakedLayeredModel implements KUnbakedModel {
     private static final Identifier DEFAULT_TRANSFORMATION = new Identifier("block/block");
-    public static final Codec<UnbakedLayeredModel> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<UnbakedLayeredModel> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.optionalFieldOf("transformation", DEFAULT_TRANSFORMATION)
             .forGetter(model -> model.transformation),
         Identifier.CODEC.fieldOf("particle").forGetter(model -> model.particle),
@@ -50,7 +51,7 @@ public class UnbakedLayeredModel implements KUnbakedModel {
     }
 
     @Override
-    public Codec<? extends KUnbakedModel> getCodec() {
+    public MapCodec<? extends KUnbakedModel> getCodec() {
         return CODEC;
     }
 

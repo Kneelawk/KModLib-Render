@@ -8,6 +8,7 @@ import java.util.function.Function;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.client.render.model.Baker;
@@ -50,7 +51,7 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
     /**
      * This model layer's codec.
      */
-    public static final Codec<UnbakedCTLayer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    public static final MapCodec<UnbakedCTLayer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         UnbakedSpriteSupplier.CODEC.fieldOf("exterior_corners").forGetter(UnbakedCTLayer::exteriorCorners),
         UnbakedSpriteSupplier.CODEC.fieldOf("interior_corners").forGetter(UnbakedCTLayer::interiorCorners),
         UnbakedSpriteSupplier.CODEC.fieldOf("horizontal_edges").forGetter(UnbakedCTLayer::horizontalEdges),
@@ -112,7 +113,7 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
     }
 
     @Override
-    public Codec<? extends UnbakedModelLayer> getCodec() {
+    public MapCodec<? extends UnbakedModelLayer> getCodec() {
         return CODEC;
     }
 

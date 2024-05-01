@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
@@ -27,7 +28,7 @@ public interface UnbakedSpriteSupplier {
     @SuppressWarnings("unchecked")
     Codec<UnbakedSpriteSupplier> CODEC = Codec.either(UnbakedStaticSpriteSupplier.CODEC,
             KBlockModels.SPRITE_SUPPLIER_REGISTRY.getCodec()
-                .dispatch(UnbakedSpriteSupplier::getCodec, codec -> (Codec<UnbakedSpriteSupplier>) codec))
+                .dispatch(UnbakedSpriteSupplier::getCodec, codec -> (MapCodec<UnbakedSpriteSupplier>) codec))
         .xmap(either -> either.map(Function.identity(), Function.identity()), supplier -> {
             if (supplier instanceof UnbakedStaticSpriteSupplier s) {
                 return Either.left(s);
@@ -39,7 +40,7 @@ public interface UnbakedSpriteSupplier {
     /**
      * @return the codec registered with {@link KBlockModels#SPRITE_SUPPLIER_REGISTRY}.
      */
-    Codec<? extends UnbakedSpriteSupplier> getCodec();
+    MapCodec<? extends UnbakedSpriteSupplier> getCodec();
 
     /**
      * @return whether this sprite supplier bakes to a static sprite.

@@ -18,6 +18,7 @@ import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.compile.JavaCompile;
+import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 
 @SuppressWarnings("unused")
 public class SubmodulePlugin implements Plugin<Project> {
@@ -55,18 +56,26 @@ public class SubmodulePlugin implements Plugin<Project> {
         String yarnMappings = (String) project.property("yarn_mappings");
         if (yarnMappings == null)
             throw new IllegalStateException("Submodule plugin requires the `yarn_mappings` property.");
+        
+        String yarnPatch = (String) project.property("yarn_patch");
+        if (yarnPatch == null)
+            throw new IllegalStateException("Submodule plugin requires the `yarn_patch` property.");
 
         String publishRepo = System.getenv("PUBLISH_REPO");
 
         BasePluginExtension base = ext.getByType(BasePluginExtension.class);
         JavaPluginExtension java = ext.getByType(JavaPluginExtension.class);
         PublishingExtension publishing = ext.getByType(PublishingExtension.class);
+        LoomGradleExtensionAPI loom = ext.getByType(LoomGradleExtensionAPI.class);
 
         base.getArchivesName().convention(suffix.map(s -> baseName + s));
 
         // Setup minecraft dependency
         dependencies.add("minecraft", "com.mojang:minecraft:" + minecraftVersion);
-        dependencies.add("mappings", "net.fabricmc:yarn:" + yarnMappings + ":v2");
+        dependencies.add("mappings", loom.layered(builder -> {
+            builder.mappings("net.fabricmc:yarn:" + yarnMappings + ":v2");
+            builder.mappings("dev.architectury:yarn-mappings-patch-neoforge:" + yarnPatch);
+        }));
 
         tasks.named("processResources", Copy.class, pr -> {
             pr.getInputs().property("version", project.getVersion());
@@ -118,15 +127,6 @@ public class SubmodulePlugin implements Plugin<Project> {
                     pub.setArtifactId(baseName + suffix.get());
                     pub.from(project.getComponents().getByName("java"));
                 });
-
-            // Fix issue with just running `genSources`
-            tasks.named("genSourcesWithVineflower", task -> {
-                task.dependsOn(rootProject.getAllprojects().stream()
-                    .map(subProj2 -> subProj2.getTasks().named("resolveVineflower")).toArray());
-                task.dependsOn(
-                    rootProject.getAllprojects().stream().map(subProj2 -> subProj2.getTasks().named("unpickJar"))
-                        .toArray());
-            });
         });
     }
 }

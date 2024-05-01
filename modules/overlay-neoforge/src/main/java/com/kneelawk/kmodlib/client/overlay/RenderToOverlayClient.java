@@ -2,7 +2,7 @@ package com.kneelawk.kmodlib.client.overlay;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
@@ -20,7 +20,7 @@ import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.Window;
 
-@Mod.EventBusSubscriber(Dist.CLIENT)
+@EventBusSubscriber(Dist.CLIENT)
 public class RenderToOverlayClient {
     private static @Nullable Framebuffer framebuffer = null;
 
