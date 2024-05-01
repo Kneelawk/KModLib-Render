@@ -22,9 +22,9 @@
   "mixins": [ ],
 
   "depends": {
-    "fabricloader": ">=0.14.17",
+    "fabricloader": ">=0.15.10",
     "minecraft": "~1.20-",
-    "java": ">=17",
+    "java": ">=21",
     "kmodlib-blockmodel": "*",
     "kmodlib-renderlayer": "*",
     "kmodlib-rendertag": "*"

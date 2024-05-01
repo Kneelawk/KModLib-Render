@@ -16,7 +16,6 @@ import org.gradle.api.publish.PublishingExtension;
 import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.TaskContainer;
-import org.gradle.api.tasks.bundling.AbstractArchiveTask;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.compile.JavaCompile;
 
@@ -78,13 +77,13 @@ public class SubmodulePlugin implements Plugin<Project> {
             pr.filesMatching("META-INF/mods.toml", details -> details.expand(Map.of("version", project.getVersion())));
         });
 
-        // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-        tasks.withType(JavaCompile.class).configureEach(compile -> compile.getOptions().getRelease().set(17));
+        // Minecraft 1.20.5 upwards uses Java 21.
+        tasks.withType(JavaCompile.class).configureEach(compile -> compile.getOptions().getRelease().set(21));
 
         java.withJavadocJar();
         java.withSourcesJar();
-        java.setSourceCompatibility(JavaVersion.VERSION_17);
-        java.setTargetCompatibility(JavaVersion.VERSION_17);
+        java.setSourceCompatibility(JavaVersion.VERSION_21);
+        java.setTargetCompatibility(JavaVersion.VERSION_21);
 
         // Configure the maven repo
         if (publishRepo != null) {
@@ -107,12 +106,10 @@ public class SubmodulePlugin implements Plugin<Project> {
                 spec -> spec.rename(name -> name + "_" + base.getArchivesName().get())));
 
             if (!isRoot.get()) {
-                BasePluginExtension rootBase = rootExt.getByType(BasePluginExtension.class);
-                base.getLibsDirectory().convention(rootBase.getLibsDirectory());
+                base.getLibsDirectory().convention(rootProject.getLayout().getBuildDirectory().dir("libs"));
 
-                JavaPluginExtension rootJava = rootExt.getByType(JavaPluginExtension.class);
-                java.getDocsDir().convention(
-                    rootJava.getDocsDir().flatMap(docsDir -> docsSuffix.map(s -> docsDir.dir(baseName + s))));
+                java.getDocsDir().convention(rootProject.getLayout().getBuildDirectory().dir("docs")
+                    .flatMap(docsDir -> docsSuffix.map(s -> docsDir.dir(baseName + s))));
             }
 
             // Configure the maven publication

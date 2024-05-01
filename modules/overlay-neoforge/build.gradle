@@ -1,6 +1,5 @@
 plugins {
     id 'maven-publish'
-    id 'architectury-plugin'
     id 'dev.architectury.loom'
     id 'com.kneelawk.versioning'
     id 'com.kneelawk.submodule'
@@ -8,11 +7,6 @@ plugins {
 
 submodule {
     suffix = 'overlay-neoforge'
-}
-
-architectury {
-    platformSetupLoomIde()
-    neoForge()
 }
 
 //loom {

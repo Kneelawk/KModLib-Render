@@ -1,9 +1,3 @@
 plugins {
-    id 'java'
-    id 'architectury-plugin'
     id 'dev.architectury.loom' apply false
-}
-
-architectury {
-    minecraft = project.minecraft_version
 }
