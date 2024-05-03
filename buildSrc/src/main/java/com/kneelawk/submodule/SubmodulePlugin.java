@@ -18,6 +18,7 @@ import org.gradle.api.tasks.Copy;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.bundling.Jar;
 import org.gradle.api.tasks.compile.JavaCompile;
+
 import net.fabricmc.loom.api.LoomGradleExtensionAPI;
 
 @SuppressWarnings("unused")
@@ -56,7 +57,7 @@ public class SubmodulePlugin implements Plugin<Project> {
         String yarnMappings = (String) project.property("yarn_mappings");
         if (yarnMappings == null)
             throw new IllegalStateException("Submodule plugin requires the `yarn_mappings` property.");
-        
+
         String yarnPatch = (String) project.property("yarn_patch");
         if (yarnPatch == null)
             throw new IllegalStateException("Submodule plugin requires the `yarn_patch` property.");
@@ -82,8 +83,8 @@ public class SubmodulePlugin implements Plugin<Project> {
 
             pr.exclude("**/*.xcf");
 
-            pr.filesMatching("fabric.mod.json", details -> details.expand(Map.of("version", project.getVersion())));
-            pr.filesMatching("META-INF/mods.toml", details -> details.expand(Map.of("version", project.getVersion())));
+            pr.filesMatching(List.of("fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml"),
+                details -> details.expand(Map.of("version", project.getVersion())));
         });
 
         // Minecraft 1.20.5 upwards uses Java 21.
