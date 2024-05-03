@@ -65,9 +65,9 @@ public class RenderToOverlayClient {
             framebuffer.beginWrite(false);
 
             NeoForge.EVENT_BUS.post(
-                new RenderToOverlayEvent(event.getLevelRenderer(), event.getPoseStack(), event.getProjectionMatrix(),
-                    event.getRenderTick(), event.getPartialTick(), event.getCamera(), event.getFrustum(),
-                    RenderToOverlay.CONSUMERS));
+                new RenderToOverlayEvent(event.getLevelRenderer(), event.getPoseStack(), event.getModelViewMatrix(),
+                    event.getProjectionMatrix(), event.getRenderTick(), event.getPartialTick(), event.getCamera(),
+                    event.getFrustum(), RenderToOverlay.CONSUMERS));
 //            testRender(event.getPoseStack(), event.getCamera().getPos());
 
             ((VertexConsumerProvider.Immediate) RenderToOverlay.CONSUMERS).draw();

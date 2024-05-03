@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 public class RenderToOverlayEvent extends Event {
     private final WorldRenderer levelRenderer;
     private final MatrixStack poseStack;
+    private final Matrix4f modelViewMatrix;
     private final Matrix4f projectionMatrix;
     private final int renderTick;
     private final float partialTick;
@@ -23,11 +24,12 @@ public class RenderToOverlayEvent extends Event {
     private final Frustum frustum;
     private final VertexConsumerProvider provider;
 
-    public RenderToOverlayEvent(WorldRenderer levelRenderer, MatrixStack poseStack, Matrix4f projectionMatrix,
-                                int renderTick, float partialTick, Camera camera, Frustum frustum,
-                                VertexConsumerProvider provider) {
+    public RenderToOverlayEvent(WorldRenderer levelRenderer, MatrixStack poseStack, Matrix4f modelViewMatrix,
+                                Matrix4f projectionMatrix, int renderTick, float partialTick, Camera camera,
+                                Frustum frustum, VertexConsumerProvider provider) {
         this.levelRenderer = levelRenderer;
         this.poseStack = poseStack;
+        this.modelViewMatrix = modelViewMatrix;
         this.projectionMatrix = projectionMatrix;
         this.renderTick = renderTick;
         this.partialTick = partialTick;
@@ -42,6 +44,10 @@ public class RenderToOverlayEvent extends Event {
 
     public MatrixStack getPoseStack() {
         return poseStack;
+    }
+
+    public Matrix4f getModelViewMatrix() {
+        return modelViewMatrix;
     }
 
     public Matrix4f getProjectionMatrix() {
