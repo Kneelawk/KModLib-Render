@@ -35,8 +35,8 @@ dependencies {
 //    modCompileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modLocalRuntime "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
-    include project(":kmodlib-blockmodel")
+//    api project(path: ":kmodlib-blockmodel", configuration: "namedElements")
+//    include project(":kmodlib-blockmodel")
 
     api project(path: ":kmodlib-overlay-fabric", configuration: "namedElements")
     include project(":kmodlib-overlay-fabric")

@@ -102,7 +102,7 @@ public final class RenderTags
                 for (Map.Entry<Identifier, List<Resource>> entry : resources.entrySet()) {
                     Identifier fileId = entry.getKey();
                     String filePath = fileId.getPath();
-                    Identifier tag = new Identifier(fileId.getNamespace(),
+                    Identifier tag = Identifier.of(fileId.getNamespace(),
                         filePath.substring(registryPath.length() + 1, filePath.length() - ".json".length()));
 
                     ImmutableSet.Builder<RegistryKey<?>> keysBuilder = ImmutableSet.builder();
