@@ -1,12 +1,11 @@
 package com.kneelawk.kmodlib.client.overlay;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import org.joml.Matrix4f;
-
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * The variables available when rendering to an overlay.
@@ -15,17 +14,17 @@ public interface OverlayRenderContext {
     /**
      * {@return the vertex buffers that get rendered to the overlay}
      */
-    VertexConsumerProvider buffers();
+    MultiBufferSource buffers();
 
     /**
      * {@return the renderer this overlay is being called from}
      */
-    WorldRenderer renderer();
+    LevelRenderer renderer();
 
     /**
      * {@return the stack used for rendering}
      */
-    MatrixStack stack();
+    PoseStack stack();
 
     /**
      * {@return the model-view-matrix used for rendering}

@@ -37,8 +37,9 @@ val neoforge = false
 
 //module(fabric, "blockmodel")
 module(xplat, "overlay-xplat")
-//module(mojmap, "overlay-xplat-mojmap")
+module(mojmap, "overlay-xplat-mojmap")
 module(fabric, "overlay-fabric")
+module(fabric, "overlay-fabric:remapCheck")
 module(neoforge, "overlay-neoforge")
 module(fabric, "renderlayer")
 module(fabric, "rendertag")

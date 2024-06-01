@@ -6,24 +6,18 @@ import org.jetbrains.annotations.Nullable;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import org.joml.Matrix4f;
-
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.pipeline.TextureTarget;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.systems.VertexSorter;
-
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.SimpleFramebuffer;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.Window;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
+import com.mojang.blaze3d.vertex.VertexSorting;
 
 public class KMLOverlayMod implements ClientModInitializer {
-    private final MinecraftClient MC = MinecraftClient.getInstance();
-    private @Nullable Framebuffer framebuffer = null;
+    private final Minecraft MC = Minecraft.getInstance();
+    private @Nullable RenderTarget framebuffer = null;
 
     @Override
     public void onInitializeClient() {
@@ -33,24 +27,24 @@ public class KMLOverlayMod implements ClientModInitializer {
     private boolean isWindowInvalid() {
         Window window = MC.getWindow();
 
-        return window.getWidth() == 0 || window.getHeight() == 0;
+        return window.getScreenWidth() == 0 || window.getScreenHeight() == 0;
     }
 
-    private @NotNull Framebuffer getFramebuffer() {
+    private @NotNull RenderTarget getFramebuffer() {
         Window window = MC.getWindow();
 
-        Framebuffer framebuffer = this.framebuffer;
+        RenderTarget framebuffer = this.framebuffer;
         if (framebuffer == null) {
-            framebuffer = new SimpleFramebuffer(window.getFramebufferWidth(), window.getFramebufferHeight(), true,
-                MinecraftClient.IS_SYSTEM_MAC);
+            framebuffer = new TextureTarget(window.getWidth(), window.getHeight(), true,
+                Minecraft.ON_OSX);
             framebuffer.setClearColor(0f, 0f, 0f, 0f);
             this.framebuffer = framebuffer;
         }
 
-        if (window.getFramebufferWidth() != framebuffer.textureWidth ||
-            window.getFramebufferHeight() != framebuffer.textureHeight) {
-            framebuffer.resize(window.getFramebufferWidth(), window.getFramebufferHeight(),
-                MinecraftClient.IS_SYSTEM_MAC);
+        if (window.getWidth() != framebuffer.width ||
+            window.getHeight() != framebuffer.height) {
+            framebuffer.resize(window.getWidth(), window.getHeight(),
+                Minecraft.ON_OSX);
         }
 
         return framebuffer;
@@ -59,27 +53,27 @@ public class KMLOverlayMod implements ClientModInitializer {
     private void render(WorldRenderContext ctx) {
         if (isWindowInvalid()) return;
 
-        RenderSystem.setProjectionMatrix(ctx.projectionMatrix(), VertexSorter.BY_DISTANCE);
+        RenderSystem.setProjectionMatrix(ctx.projectionMatrix(), VertexSorting.DISTANCE_TO_ORIGIN);
 
         OverlayRenderContext newCtx = new OverlayWorldRenderContext(ctx);
 
-        Framebuffer framebuffer = getFramebuffer();
-        framebuffer.clear(MinecraftClient.IS_SYSTEM_MAC);
+        RenderTarget framebuffer = getFramebuffer();
+        framebuffer.clear(Minecraft.ON_OSX);
 
-        framebuffer.beginWrite(false);
+        framebuffer.bindWrite(false);
 
         RenderToOverlay.EVENT.invoker().renderToOverlay(newCtx);
 //        testRender(newCtx);
 
-        ((VertexConsumerProvider.Immediate) RenderToOverlay.CONSUMERS).draw();
+        ((MultiBufferSource.BufferSource) RenderToOverlay.CONSUMERS).endBatch();
 
-        MC.getFramebuffer().beginWrite(false);
+        MC.getMainRenderTarget().bindWrite(false);
 
         // Framebuffer.draw() messes with the projection matrix, so we're keeping a backup.
         Matrix4f projBackup = RenderSystem.getProjectionMatrix();
-        VertexSorter sorterBackup = RenderSystem.getVertexSorting();
+        VertexSorting sorterBackup = RenderSystem.getVertexSorting();
         RenderSystem.enableBlend();
-        framebuffer.draw(MC.getWindow().getFramebufferWidth(), MC.getWindow().getFramebufferHeight(), false);
+        framebuffer.blitToScreen(MC.getWindow().getWidth(), MC.getWindow().getHeight(), false);
         RenderSystem.disableBlend();
         RenderSystem.setProjectionMatrix(projBackup, sorterBackup);
     }
