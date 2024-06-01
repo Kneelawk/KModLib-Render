@@ -61,7 +61,7 @@ public class KMLOverlayMod implements ClientModInitializer {
 
         RenderSystem.setProjectionMatrix(ctx.projectionMatrix(), VertexSorter.BY_DISTANCE);
 
-        WorldRenderContext newCtx = new OverlayWorldRenderContext(ctx);
+        OverlayRenderContext newCtx = new OverlayWorldRenderContext(ctx);
 
         Framebuffer framebuffer = getFramebuffer();
         framebuffer.clear(MinecraftClient.IS_SYSTEM_MAC);

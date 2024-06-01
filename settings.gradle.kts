@@ -36,6 +36,8 @@ val fabric = true
 val neoforge = false
 
 //module(fabric, "blockmodel")
+module(xplat, "overlay-xplat")
+//module(mojmap, "overlay-xplat-mojmap")
 module(fabric, "overlay-fabric")
 module(neoforge, "overlay-neoforge")
 module(fabric, "renderlayer")
