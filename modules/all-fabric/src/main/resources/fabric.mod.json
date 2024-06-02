@@ -23,7 +23,7 @@
 
   "depends": {
     "fabricloader": ">=0.15.10",
-    "minecraft": "~1.20-",
+    "minecraft": "~1.21-",
     "java": ">=21",
     "kmodlib-blockmodel": "*",
     "kmodlib-renderlayer": "*",
