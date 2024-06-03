@@ -1,14 +1,18 @@
 package com.kneelawk.kmodlib.client.overlay;
 
 import java.util.SequencedMap;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+
 import com.kneelawk.commonevents.api.BusEvent;
 import com.kneelawk.commonevents.api.Event;
 import com.kneelawk.commonevents.api.Scan;
-import com.kneelawk.commonevents.events.api.CommonEventsEvents;
-import com.mojang.blaze3d.vertex.ByteBufferBuilder;
+import com.kneelawk.commonevents.mainbus.api.CommonEventsMainBus;
 
 /**
  * Event for rendering to the KModLib overlay.
@@ -38,12 +42,8 @@ public interface RenderToOverlay {
     /**
      * Event fired when rendering to the KModLib overlay.
      */
-    @BusEvent(CommonEventsEvents.MAIN_EVENT_BUS_NAME)
-    Event<RenderToOverlay> EVENT = Event.create(RenderToOverlay.class, ctx -> {}, listeners -> ctx -> {
-        for (RenderToOverlay listener : listeners) {
-            listener.renderToOverlay(ctx);
-        }
-    });
+    @BusEvent(CommonEventsMainBus.NAME)
+    Event<RenderToOverlay> EVENT = Event.createSimple(RenderToOverlay.class);
 
     /**
      * Called to render something to the KModLib overlay.

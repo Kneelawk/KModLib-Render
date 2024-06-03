@@ -10,11 +10,9 @@ submodule {
     applyFabricLoaderDependency()
     forceRemap()
     setupJavadoc()
-}
 
-dependencies {
     val common_events_version: String by project
-    modApi("com.kneelawk.common-events:common-events-events-xplat-intermediary:$common_events_version")
+    xplatExternalDependency { "com.kneelawk.common-events:common-events-main-bus-$it:$common_events_version" }
 }
 
 kpublish {
