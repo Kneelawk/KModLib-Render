@@ -12,8 +12,8 @@ submodule {
 }
 
 dependencies {
-//    api(project(":blockmodel", configuration = "namedElements"))
-//    include(project(":blockmodel"))
+    api(project(":blockmodel", configuration = "namedElements"))
+    include(project(":blockmodel"))
 
     api(project(":overlay-fabric", configuration = "namedElements"))
     include(project(":overlay-fabric"))

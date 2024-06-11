@@ -33,9 +33,9 @@ fun module(enabled: Boolean, name: String) {
 val xplat = true
 val mojmap = true
 val fabric = true
-val neoforge = false
+val neoforge = true
 
-//module(fabric, "blockmodel")
+module(fabric, "blockmodel")
 module(xplat, "overlay-xplat")
 module(mojmap, "overlay-xplat-mojmap")
 module(fabric, "overlay-fabric")
