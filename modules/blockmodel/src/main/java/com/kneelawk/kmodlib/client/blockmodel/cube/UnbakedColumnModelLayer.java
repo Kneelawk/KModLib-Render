@@ -78,8 +78,8 @@ public record UnbakedColumnModelLayer(@Nullable JsonTexture side, @Nullable Json
 
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                          ModelBakeSettings rotationContainer, Identifier modelId) {
+                                          ModelBakeSettings rotationContainer) {
         return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, end,
-            end, side, side, side, side, textureGetter, modelId);
+            end, side, side, side, side, textureGetter);
     }
 }

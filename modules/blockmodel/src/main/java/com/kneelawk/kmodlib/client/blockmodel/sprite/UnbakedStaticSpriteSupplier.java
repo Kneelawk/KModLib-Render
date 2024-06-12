@@ -30,13 +30,13 @@ public record UnbakedStaticSpriteSupplier(Identifier sprite) implements UnbakedS
 
     @Override
     public @NotNull Sprite bakeToSprite(Function<SpriteIdentifier, Sprite> textureGetter,
-                                        @Nullable ModelBakeSettings rotationContainer, Identifier modelId) {
+                                        @Nullable ModelBakeSettings rotationContainer) {
         return textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, sprite));
     }
 
     @Override
     public @NotNull BakedSpriteSupplier bake(Function<SpriteIdentifier, Sprite> textureGetter,
-                                             @Nullable ModelBakeSettings rotationContainer, Identifier modelId) {
-        return new BakedStaticSpriteSupplier(bakeToSprite(textureGetter, rotationContainer, modelId));
+                                             @Nullable ModelBakeSettings rotationContainer) {
+        return new BakedStaticSpriteSupplier(bakeToSprite(textureGetter, rotationContainer));
     }
 }

@@ -28,17 +28,19 @@ import net.minecraft.util.Identifier;
 import com.kneelawk.kmodlib.client.blockmodel.BakedMeshModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.BakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.JsonMaterial;
+import com.kneelawk.kmodlib.client.blockmodel.KBlockModels;
 import com.kneelawk.kmodlib.client.blockmodel.KLog;
 import com.kneelawk.kmodlib.client.blockmodel.UnbakedModelLayer;
 import com.kneelawk.kmodlib.client.blockmodel.util.RenderUtils;
 
-public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, boolean rotate)
+public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, boolean rotate, Identifier modelId)
     implements UnbakedModelLayer {
     public static final MapCodec<UnbakedModelRefModelLayer> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.fieldOf("ref").forGetter(UnbakedModelRefModelLayer::ref),
         JsonMaterial.CODEC.optionalFieldOf("material", JsonMaterial.DEFAULT)
             .forGetter(UnbakedModelRefModelLayer::material),
-        Codec.BOOL.optionalFieldOf("rotate", true).forGetter(UnbakedModelRefModelLayer::rotate)
+        Codec.BOOL.optionalFieldOf("rotate", true).forGetter(UnbakedModelRefModelLayer::rotate),
+        KBlockModels.MODEL_ID_KEY.retrieve()
     ).apply(instance, UnbakedModelRefModelLayer::new));
 
     @Override
@@ -58,7 +60,7 @@ public record UnbakedModelRefModelLayer(Identifier ref, JsonMaterial material, b
 
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                          ModelBakeSettings rotationContainer, Identifier modelId) {
+                                          ModelBakeSettings rotationContainer) {
         if (baker.getOrLoadModel(ref) == baker.getOrLoadModel(ModelLoader.MISSING_ID)) {
             KLog.LOG.warn("Model {} is unable to find referenced model: {}", modelId, ref);
             return null;

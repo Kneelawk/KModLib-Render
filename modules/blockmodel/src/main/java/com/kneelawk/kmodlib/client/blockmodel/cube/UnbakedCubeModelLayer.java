@@ -98,8 +98,8 @@ public record UnbakedCubeModelLayer(@Nullable JsonTexture down, @Nullable JsonTe
 
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                          ModelBakeSettings rotationContainer, Identifier modelId) {
+                                          ModelBakeSettings rotationContainer) {
         return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, down, up,
-            north, south, west, east, textureGetter, modelId);
+            north, south, west, east, textureGetter);
     }
 }

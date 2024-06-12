@@ -11,7 +11,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.util.Identifier;
 
 import com.kneelawk.kmodlib.client.blockmodel.KBlockModels;
 
@@ -52,22 +51,20 @@ public interface UnbakedSpriteSupplier {
      *
      * @param textureGetter     the supplied texture getter function.
      * @param rotationContainer the supplied rotation container.
-     * @param modelId           the baking model's id.
      * @return this as a static sprite, or <code>null</code> if this cannot bake to a static sprite, an error occurred,
      * or this just bakes to <code>null</code>.
      */
     @Nullable Sprite bakeToSprite(Function<SpriteIdentifier, Sprite> textureGetter,
-                                  @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
+                                  @Nullable ModelBakeSettings rotationContainer);
 
     /**
      * Bakes this sprite supplier into a baked sprite supplier.
      *
      * @param textureGetter     the supplied texture getter function.
      * @param rotationContainer the supplied rotation container.
-     * @param modelId           the baking model's id.
      * @return a baked sprite supplier, or <code>null</code> if an error occurred or this just bakes to
      * <code>null</code>.
      */
     @Nullable BakedSpriteSupplier bake(Function<SpriteIdentifier, Sprite> textureGetter,
-                                       @Nullable ModelBakeSettings rotationContainer, Identifier modelId);
+                                       @Nullable ModelBakeSettings rotationContainer);
 }

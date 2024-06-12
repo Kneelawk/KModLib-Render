@@ -86,8 +86,8 @@ public record UnbakedBottomTopModelLayer(@Nullable JsonTexture side, @Nullable J
 
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                          ModelBakeSettings rotationContainer, Identifier modelId) {
+                                          ModelBakeSettings rotationContainer) {
         return CubeModelUtils.createBlock(rotationContainer, rotate, cullFaces, quarterFaces, depth, material, bottom,
-            top, side, side, side, side, textureGetter, modelId);
+            top, side, side, side, side, textureGetter);
     }
 }

@@ -48,9 +48,8 @@ public interface UnbakedModelLayer {
      * @param baker             the baker supplied to this model.
      * @param textureGetter     the texture getter for this model.
      * @param rotationContainer the rotation container for this model.
-     * @param modelId           the model id of this model.
      * @return a baked model layer, or <code>null</code> if an error occurred.
      */
     @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                   ModelBakeSettings rotationContainer, Identifier modelId);
+                                   ModelBakeSettings rotationContainer);
 }

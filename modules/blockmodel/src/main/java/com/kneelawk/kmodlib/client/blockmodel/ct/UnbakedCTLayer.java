@@ -128,25 +128,25 @@ public record UnbakedCTLayer(UnbakedSpriteSupplier exteriorCorners, UnbakedSprit
 
     @Override
     public @Nullable BakedModelLayer bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                                          ModelBakeSettings rotationContainer, Identifier modelId) {
+                                          ModelBakeSettings rotationContainer) {
         Function<Identifier, Sprite> sprite =
             id -> textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, id));
 
         BakedSpriteSupplier[] sprites;
         if (noEdges == null) {
             sprites = new BakedSpriteSupplier[]{
-                exteriorCorners.bake(textureGetter, rotationContainer, modelId),
-                horizontalEdges.bake(textureGetter, rotationContainer, modelId),
-                verticalEdges.bake(textureGetter, rotationContainer, modelId),
-                interiorCorners.bake(textureGetter, rotationContainer, modelId)
+                exteriorCorners.bake(textureGetter, rotationContainer),
+                horizontalEdges.bake(textureGetter, rotationContainer),
+                verticalEdges.bake(textureGetter, rotationContainer),
+                interiorCorners.bake(textureGetter, rotationContainer)
             };
         } else {
             sprites = new BakedSpriteSupplier[]{
-                exteriorCorners.bake(textureGetter, rotationContainer, modelId),
-                horizontalEdges.bake(textureGetter, rotationContainer, modelId),
-                verticalEdges.bake(textureGetter, rotationContainer, modelId),
-                interiorCorners.bake(textureGetter, rotationContainer, modelId),
-                noEdges.bake(textureGetter, rotationContainer, modelId)
+                exteriorCorners.bake(textureGetter, rotationContainer),
+                horizontalEdges.bake(textureGetter, rotationContainer),
+                verticalEdges.bake(textureGetter, rotationContainer),
+                interiorCorners.bake(textureGetter, rotationContainer),
+                noEdges.bake(textureGetter, rotationContainer)
             };
         }
 

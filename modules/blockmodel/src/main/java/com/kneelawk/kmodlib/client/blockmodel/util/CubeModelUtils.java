@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
@@ -47,7 +46,6 @@ public class CubeModelUtils {
      * @param west              west texture.
      * @param east              east texture.
      * @param textureGetter     the texture getter the model is being baked with.
-     * @param modelId           the model id of the model being baked.
      * @return a baked model layer.
      */
     public static @NotNull BakedModelLayer createBlock(ModelBakeSettings rotationContainer, boolean rotate,
@@ -56,8 +54,7 @@ public class CubeModelUtils {
                                                        @Nullable JsonTexture up, @Nullable JsonTexture north,
                                                        @Nullable JsonTexture south, @Nullable JsonTexture west,
                                                        @Nullable JsonTexture east,
-                                                       Function<SpriteIdentifier, Sprite> textureGetter,
-                                                       Identifier modelId) {
+                                                       Function<SpriteIdentifier, Sprite> textureGetter) {
         float depthClamped = MathHelper.clamp(depth, 0.0f, 0.5f);
         float depthMaxed = Math.min(depth, 0.5f);
         return CubeModelUtils.createBlock(rotate ? rotationContainer : null, cullFaces, quarterFaces, depthClamped,
@@ -69,7 +66,7 @@ public class CubeModelUtils {
                 down != null ? down.tintIndex() : -1, up != null ? up.tintIndex() : -1,
                 north != null ? north.tintIndex() : -1, south != null ? south.tintIndex() : -1,
                 west != null ? west.tintIndex() : -1, east != null ? east.tintIndex() : -1
-            }, textureGetter, modelId);
+            }, textureGetter);
     }
 
     /**
@@ -84,7 +81,6 @@ public class CubeModelUtils {
      * @param unbakedSprites <code>6</code> unbaked sprites, one for each side of the block.
      * @param tintIndices    <code>6</code> tint indices, one for each side of the block.
      * @param textureGetter  the texture getter this model is being baked with.
-     * @param modelId        the model id of the model being baked.
      * @return a baked model layer.
      */
     public static @NotNull BakedModelLayer createBlock(@Nullable ModelBakeSettings rotation, boolean cullFaces,
@@ -92,8 +88,7 @@ public class CubeModelUtils {
                                                        RenderMaterial material,
                                                        @Nullable UnbakedSpriteSupplier[] unbakedSprites,
                                                        int[] tintIndices,
-                                                       Function<SpriteIdentifier, Sprite> textureGetter,
-                                                       Identifier modelId) {
+                                                       Function<SpriteIdentifier, Sprite> textureGetter) {
         boolean bakesToSprite = true;
         for (UnbakedSpriteSupplier supplier : unbakedSprites) {
             if (supplier == null) continue;
@@ -110,7 +105,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                sprites[i] = supplier.bakeToSprite(textureGetter, rotation, modelId);
+                sprites[i] = supplier.bakeToSprite(textureGetter, rotation);
             }
 
             MeshBuilder meshBuilder =
@@ -125,7 +120,7 @@ public class CubeModelUtils {
                 UnbakedSpriteSupplier supplier = unbakedSprites[i];
                 if (supplier == null) continue;
 
-                bakedSprites[i] = supplier.bake(textureGetter, rotation, modelId);
+                bakedSprites[i] = supplier.bake(textureGetter, rotation);
             }
 
             return new BakedSpriteCubeModelLayer(rotation, cullFaces, quarterFaces, sideDepth, faceDepth, material,

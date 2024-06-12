@@ -22,32 +22,36 @@ import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 
 public class UnbakedLayeredModel implements KUnbakedModel {
-    private static final Identifier DEFAULT_TRANSFORMATION = new Identifier("block/block");
+    private static final Identifier DEFAULT_TRANSFORMATION = Identifier.of("block/block");
     public static final MapCodec<UnbakedLayeredModel> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Identifier.CODEC.optionalFieldOf("transformation", DEFAULT_TRANSFORMATION)
             .forGetter(model -> model.transformation),
         Identifier.CODEC.fieldOf("particle").forGetter(model -> model.particle),
         Codec.list(UnbakedModelLayer.CODEC).fieldOf("layers").forGetter(model -> model.layers),
-        Codec.BOOL.optionalFieldOf("side_lit", true).forGetter(model -> model.sideLit)
+        Codec.BOOL.optionalFieldOf("side_lit", true).forGetter(model -> model.sideLit),
+        KBlockModels.MODEL_ID_KEY.retrieve()
     ).apply(instance, UnbakedLayeredModel::new));
 
     private final Identifier transformation;
     private final Identifier particle;
     private final List<UnbakedModelLayer> layers;
     private final boolean sideLit;
+    private final Identifier modelId;
 
     private @Nullable JsonUnbakedModel transformationModel = null;
 
-    public UnbakedLayeredModel(Identifier transformation, Identifier particle, List<UnbakedModelLayer> layers) {
-        this(transformation, particle, layers, true);
+    public UnbakedLayeredModel(Identifier transformation, Identifier particle, List<UnbakedModelLayer> layers,
+                               Identifier modelId) {
+        this(transformation, particle, layers, true, modelId);
     }
 
     public UnbakedLayeredModel(Identifier transformation, Identifier particle, List<UnbakedModelLayer> layers,
-                               boolean sideLit) {
+                               boolean sideLit, Identifier modelId) {
         this.transformation = transformation;
         this.particle = particle;
         this.layers = layers;
         this.sideLit = sideLit;
+        this.modelId = modelId;
     }
 
     @Override
@@ -74,7 +78,7 @@ public class UnbakedLayeredModel implements KUnbakedModel {
     @Nullable
     @Override
     public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter,
-                           ModelBakeSettings rotationContainer, Identifier modelId) {
+                           ModelBakeSettings rotationContainer) {
         JsonUnbakedModel transModel = transformationModel;
         if (transModel == null) {
             KLog.LOG.error(
@@ -92,7 +96,7 @@ public class UnbakedLayeredModel implements KUnbakedModel {
             textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, particle));
 
         BakedModelLayer[] bakedLayers =
-            layers.stream().map(layer -> layer.bake(baker, textureGetter, rotationContainer, modelId))
+            layers.stream().map(layer -> layer.bake(baker, textureGetter, rotationContainer))
                 .toArray(BakedModelLayer[]::new);
 
         for (BakedModelLayer bakedLayer : bakedLayers) {
